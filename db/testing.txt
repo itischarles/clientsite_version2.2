@@ -1,0 +1,5 @@
+user: adv1user1
+pass: 123456
+
+After login go to
+goto dashboard - http://localhost/clientsite/dashboard
