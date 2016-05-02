@@ -1,0 +1,202 @@
+
+/* 
+    Created on : 01-Dec-2015, 15:54:01
+    Author     : itischarles
+*/
+
+/*fluh footer to bootm*/
+* {
+    margin: 0;
+}
+html, body {
+    height: 100%;
+}
+
+#wrap {
+  min-height: 100%;
+}
+
+#main {
+  padding-bottom:2em; 
+}
+.footer {
+  padding-top:20px;
+}
+ 
+
+
+
+body{
+    background: #fff none repeat scroll 0 0;
+    color: #414141;
+    font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;
+/*    font-size: 100%;*/
+    height: 100%;
+    line-height: 150%;
+}
+
+#main {
+  
+}
+
+.page-width{
+      margin: auto;
+    max-width: 1000px;
+}
+
+.auto-margin{
+    margin: auto;
+}
+
+ 
+a {
+    color: #23707c;
+}
+
+h1{
+    color: #4d4d4d;
+    font-size: 2.2em;
+    font-weight: normal;
+/*    margin: 0 0 0.1em;
+    padding: 0 10px;*/
+}
+h2{
+       color: #4d4d4d;
+    font-size: 1.6em;
+    font-weight: normal;
+    margin: 0 0 0.1em;
+/*    padding: 0 10px;*/
+}
+
+h3{
+    font-size: 1.2em;
+    font-weight: normal;
+}
+h4{
+    font-size: 1em;
+    font-weight: normal;
+}
+
+.col-100{
+    width: 100%
+}
+
+
+
+/**HEADER******/
+.navbar-default {
+    background: transparent none repeat scroll 0 0;
+    border: medium none;
+}
+.navbar-custom {
+/*    background: #C1AC7A none repeat scroll 0 0;*/
+    margin-bottom: 1em !important;;
+/*    border-top: 2px solid #000 !important;;*/
+}
+
+.navbar{
+    margin-bottom: 0;
+    min-height: 39px;
+    border: none;
+    border-radius: 0;
+}
+.navbar-brand {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.logo-nav-wrapper {
+/*    border: 1px solid;*/
+    height: 77px;
+}
+
+
+/** FORMS**/
+#login_form form {
+    background: #faf7f4 none repeat scroll 0 0;
+    border-radius: 10px;
+    padding: 1em 0 3em 3em;
+}
+
+#login_form div {
+    padding: 0.7em 9px 0.7em 0;
+}
+
+.btn-gold {
+    background-color: #b9a875;
+    border-color: #b9a875;
+    color: #fff;
+}
+
+
+
+/**SIDEBAR**/
+
+.white-bg {
+    background: #fff none repeat scroll 0 0;
+}
+.grey-bg {
+    background: #d9cdae none repeat scroll 0 0
+}
+.sidebar-border {
+    border: 1px solid #000;
+}
+
+
+.border-radius {
+    border-radius: 10px;
+}
+
+.padding-1em{
+    padding: 1em;
+}
+.sidebar-margin{
+    margin: 0.7em;
+}
+
+.sidebar .jumbotron{
+    padding: 0.5em 1em;
+}
+
+
+.phone-icon {
+    background: transparent url("../images/phone-btn.png") no-repeat scroll 0 0;
+    padding: 0 0 0 18px;
+}
+.gr-text {
+    color: #000;
+}
+
+.tech-icon {
+    background: transparent url("../images/tech-btn.png") no-repeat scroll 0 0;
+    padding: 0 0 0 18px;
+}
+.bl-text {
+    color: #000;
+}
+
+
+
+
+
+
+
+
+/***FOOTER***/
+footer{
+/*    background-image: url("../images/bg-1.png");
+    background-position: left top;
+    background-repeat: repeat-x;
+    background-color: #5d595a;*/
+/*    margin-top: 5em;*/
+    
+}
+.footer{
+    background: none repeat scroll 0 0 #000000
+}
+.footer-wrapper{
+    padding: 2em 0 2em 0
+}
+.footer-wrapper p{
+    color: #3b3b3b;
+    font-size: 11px;
+}

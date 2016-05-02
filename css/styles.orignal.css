@@ -1,0 +1,266 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 13-Aug-2015, 16:49:13
+    Author     : itischarles
+*/
+
+ 
+a {
+    color: #23707c;
+}
+
+h1{
+    color: #4d4d4d;
+    font-size: 2.2em;
+    font-weight: normal;
+/*    margin: 0 0 0.1em;
+    padding: 0 10px;*/
+}
+h2{
+       color: #4d4d4d;
+    font-size: 1.6em;
+    font-weight: normal;
+    margin: 0 0 0.1em;
+/*    padding: 0 10px;*/
+}
+
+h3{
+    font-size: 1.2em;
+    font-weight: normal;
+}
+h4{
+    font-size: 1em;
+    font-weight: normal;
+}
+
+
+hr.hr-header {
+/*    border: 1px solid #60abdc;*/
+    margin-bottom: 0;
+    margin-top: 34px;
+}
+.none{
+    display: none
+}
+
+.max-width {
+    margin: auto;
+    max-width: 1000px;
+}
+
+
+/**HEADER***/
+.navbar-brand{
+    padding: 5px 15px 14px 0;
+}
+
+header .navbar{
+    background: none;
+    border: 0;
+}
+
+
+.main_nav {
+    background: #C1AC7A none repeat scroll 0 0;
+    margin-bottom: 1em;
+    border-top: 2px solid #000;
+}
+
+.main_nav .nav-tabs{
+    border: none;
+}
+
+
+.main_nav .navbar{
+    margin-bottom: 0;
+}
+.main_nav .navbar-inverse {
+    background-color: #c1ac7a;
+    border-color: transparent;
+}
+
+.main_nav .navbar-inverse.navbar-toggle {
+    border-color: #528e30;
+}
+#myNavbar{
+    border-color:#60ABDC
+}
+
+.main_nav .navbar-inverse .navbar-nav > li > a {
+    color: #4d4d4d;
+}
+.navbar-inverse .navbar-toggle,.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus  {
+    background: #4f946d none repeat scroll 0 0;
+}
+
+.clear{
+    clear: both;
+}
+
+.col-100{
+    width: 100%;
+}
+/*** MEDDILE SECTION**/
+
+#main {
+    margin-bottom: 2em;
+    min-height: 500px;
+    margin-top: 1em;
+}
+
+
+#login_form form {
+    background: #faf7f4 none repeat scroll 0 0;
+    border-radius: 10px;
+    padding: 1em 0 3em 3em;
+}
+
+.error_text {
+    color: #f04d22;
+}
+.error-border {
+    border: 1px solid #f28e8e;
+}
+
+.gr-text2 {
+    color: #000;
+}
+.underline {
+    border-bottom: 2px solid;
+}
+#login_form div {
+    padding: 0.7em 9px 0.7em 0;
+}
+
+.doclist-header{
+    background: #808080;
+    color: #fff;
+}
+
+
+.space-2em-bottom{
+    margin-bottom: 2em;
+}
+
+.btn-gold {
+    background-color: #b9a875;
+    border-color: #b9a875;
+    color: #fff;
+}
+
+/**FOOTER***/
+
+footer {
+     border-top: 4px solid #c1ac7a;
+}
+#footer_nav {
+    border: 0 none;
+}
+
+ul#footer_nav {
+    display: block;
+    margin: 14px 0;
+    padding: 0;
+}
+
+#footer_nav a {
+    color: #000;
+}
+
+/**SIDEBAR**/
+
+.white-bg {
+    background: #fff none repeat scroll 0 0;
+}
+.grey-bg {
+    background: #d9cdae none repeat scroll 0 0
+}
+.sidebar-border {
+    border: 1px solid #000;
+}
+
+
+.border-radius {
+    border-radius: 10px;
+}
+
+.padding-1em{
+    padding: 1em;
+}
+.sidebar-margin{
+    margin: 0.7em;
+}
+
+
+/*#accordion h2 {
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}*/
+.phone-icon {
+    background: transparent url("../images/phone-btn.png") no-repeat scroll 0 0;
+    padding: 0 0 0 18px;
+}
+.gr-text {
+    color: #000;
+}
+
+.tech-icon {
+    background: transparent url("../images/tech-btn.png") no-repeat scroll 0 0;
+    padding: 0 0 0 18px;
+}
+.bl-text {
+    color: #000;
+}
+
+
+
+
+/***MEDIA QUERIES**/
+/* Large desktops and laptops */
+@media (min-width: 1200px) {
+
+}
+
+/* Landscape tablets and medium desktops */
+@media (min-width: 992px) and (max-width: 1199px) {
+
+}
+
+/* Portrait tablets and small desktops */
+@media (min-width: 768px) and (max-width: 991px) {
+
+}
+
+/* Landscape phones and portrait tablets */
+@media (max-width: 767px) {
+
+}
+
+/* Portrait phones and smaller */
+@media (max-width: 480px) {
+    .logo2 {
+            margin-top: 2em;
+            display: none;
+        }
+        
+        .navbar-brand img{
+            width: 283px;
+        }
+        h1 {
+            font-size: 24px;
+        }
+}
+
+
+/**MESSAGE**/
+.message-list {
+    border: 1px solid gray;
+    border-radius: 4px;
+    box-shadow: 4px 4px 3px #f0f0f0;
+    margin-bottom: 0.5em;
+    padding: 0.5em;
+}
