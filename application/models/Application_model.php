@@ -12,6 +12,7 @@ class Application_model extends CI_Model{
         parent::__construct();
     }
     
+     
    
     
     
@@ -39,7 +40,7 @@ class Application_model extends CI_Model{
         $this->db->where($data);
         $res = $this->db->get("applications");
         if ($res) {
-            return $res->result();
+            return $res->row();
         }
         return false;
     }
@@ -56,7 +57,7 @@ class Application_model extends CI_Model{
         $this->db->where('clientID', $clientID);
         $res = $this->db->get('applications');
         if ($res) {
-            return $res->result();
+            return $res->row();
         }
         return false;
     }
@@ -76,5 +77,11 @@ class Application_model extends CI_Model{
         return false;
     }
     
-    
+     public function getClientByUserId($userID) {
+
+        $this->db->where('userID', $userID);
+
+        return $this->db->get('clients')->result();
+    }
+
 }

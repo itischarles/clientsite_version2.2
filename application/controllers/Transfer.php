@@ -5,7 +5,7 @@
  *
  * @author itischarles
  */
-class Application extends MY_Controller {
+class Transfer extends MY_Controller {
 
     var $user_accessor = ''; // to access the user model
     var $authorisation_accessor;
@@ -73,12 +73,12 @@ class Application extends MY_Controller {
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/navbar', $data);
-        $this->load->view('application/overview', $data);
+        $this->load->view('application/transferForm', $data);
         $this->load->view('templates/footer', $data);
     }
 
-    public function new_Application($userUrl = '', $applicationType = '') {
-
+    public function new_Transfer($userUrl = '', $applicationId) {
+        
         $userDetails = $this->user_accessor->getUser_customWhere(array('userBaseUrl' => $userUrl));
 
         if (empty($userDetails)):
@@ -87,49 +87,31 @@ class Application extends MY_Controller {
             redirect($_SERVER['HTTP_REFERER']);
             return false;
         endif;
-
-        $types = array('sipp', 'pension', 'isa', 'bond', 'gia');
-
-        if (!in_array($applicationType, $types)):
-            $this->session->set_flashdata('message', 'Invalid Application detected!!!');
-            $this->session->set_flashdata('type', 'flash_error');
-            redirect($_SERVER['HTTP_REFERER']);
-            return false;
-        endif;
-
-
-        /**
-         * @todo check if the user already has an application for this type
-         * if yes, stop and redirect with a message
-         * if no continue
-         */
-         $res = $this->application_accessor->getClientByUserId($userDetails->userID);
-         $clientID = $res->clientID;
         
-        $wdata['applicationType'] = $applicationType;
-        $wdata['clientID'] = $clientID;
+        $app_id = $applicationId;
         
-        $is_app_exists = $this->application_accessor->isApplicationExists($wdata);
+        
 
-        if (!$is_app_exists) {
-            $newApp['applicationReference'] = rand(11111, 99999);
-            $newApp['application_date'] = changeDateFormat('now', 'Y-m-d', true);
-            $newApp['applicationType'] = $applicationType;
-            $newApp['clientID'] = $userDetails->userID;
-            $app_id = $this->application_accessor->addNewApplication($newApp);
-            $appsDetails = $this->application_accessor->getApplicationDataById($app_id);
-            $data['applicationDetails'] = $appsDetails;
-        } else {
-            $app_id = $is_app_exists->applicationID;
-            $data['applicationDetails'] = $is_app_exists;
-        }
+        $newTransfer['applicationID'] = $app_id;
+        $newTransfer['pensionProvider'] = $this->input->post('pensionProvider');
+        $newTransfer['transferReferrence'] = $this->input->post('transferReferrence');
+        $newTransfer['approximateValue'] = $this->input->post('approximateValue');
 
-
-
-        if ($app_id):
+        $trasferAdded = $this->transfer_accessor->addNewTransfer($newTransfer);
+        
+        if ($trasferAdded):
             // go to application overview
             redirect('client/' . $userUrl . '/application/' . $app_id);
         endif;
     }
+
+  
+
+
+
+       
+
+
+
 
 }
