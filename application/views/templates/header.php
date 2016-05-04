@@ -37,8 +37,9 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     
-<!--    <script src="<?php //echo base_url('third_party/jquery/jquery_2_1_4.js') ?>"></script>-->
-    
+   <script src="<?php echo base_url('third_party/jquery/jquery_2_1_4.js') ?>"></script>
+    <script>  $(function(){  $('#target_dates').datepicker({  dateFormat: 'dd-mm-yy',
+        altField: '#thealtdate',   altFormat: 'yy-mm-dd' });   });  </script>
  
   </head>
 

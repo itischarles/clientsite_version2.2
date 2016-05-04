@@ -85,10 +85,14 @@ foreach ($types as $key => $type){
 
     $route['client/(:any)/application/new/' . $type] = "Application/new_Application/$1/" . $type;
     $route['client/(:any)/transfer/new/(:num)'] = "Transfer/new_Transfer/$1/$2";
+    $route['client/(:any)/contribution/new/(:num)'] = "Contribution/new_Contribution/$1/$2";
+    $route['client/(:any)/investment/new/(:num)'] = "Investment/new_Investment/$1/$2";
 }
 
 $route['client/(:any)/application/(:num)'] = "Application/index/$1/$2";
 $route['client/(:any)/transfer/(:num)'] = "Transfer/index/$1/$2";
+$route['client/(:any)/contribution/(:num)'] = "Contribution/index/$1/$2";
+$route['client/(:any)/investment/(:num)'] = "Investment/index/$1/$2";
 
 
 

@@ -5,7 +5,7 @@
  *
  * @author itischarles
  */
-class Application extends MY_Controller {
+class Investment extends MY_Controller {
 
     var $user_accessor = ''; // to access the user model
     var $authorisation_accessor;
@@ -56,11 +56,7 @@ class Application extends MY_Controller {
             return false;
         endif;
 
-        /**
-         * 
-         * @todo test that this application belogs to this client
-         * if yes continue to display the application overview page
-         */
+       
         $data['applicationDetails'] = $this->application_accessor->getApplicationDataById($applicationID);
         $data['transfer'] = $this->transfer_accessor->getTransferDataById($applicationID);
         $data['contribution'] = $this->contribution_accessor->getContributionsDataById($applicationID);
@@ -71,11 +67,11 @@ class Application extends MY_Controller {
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/navbar', $data);
-        $this->load->view('application/overview', $data);
+        $this->load->view('application/investmentForm', $data);
         $this->load->view('templates/footer', $data);
     }
 
-    public function new_Application($userUrl = '', $applicationType = '') {
+    public function new_Investment($userUrl = '', $applicationId) {
 
         $userDetails = $this->user_accessor->getUser_customWhere(array('userBaseUrl' => $userUrl));
 
@@ -86,50 +82,63 @@ class Application extends MY_Controller {
             return false;
         endif;
 
-        $types = array('sipp', 'pension', 'isa', 'bond', 'gia');
-
-        if (!in_array($applicationType, $types)):
-            $this->session->set_flashdata('message', 'Invalid Application detected!!!');
-            $this->session->set_flashdata('type', 'flash_error');
-            redirect($_SERVER['HTTP_REFERER']);
-            return false;
-        endif;
-
-
-        /**
-         * @todo check if the user already has an application for this type
-         * if yes, stop and redirect with a message
-         * if no continue
-         */
-         $res = $this->application_accessor->getClientByUserId($userDetails->userID);
-         $clientID = $res->clientID;
+        $this->load->library('form_validation');
         
-        $wdata['applicationType'] = $applicationType;
-        $wdata['clientID'] = $clientID;
-      
-        
-        
-        $is_app_exists = $this->application_accessor->isApplicationExists($wdata);
+        $app_id = $applicationId;
+        $random_no = rand(111111111, 999999999);
 
-        if (!$is_app_exists) {
-            $newApp['applicationReference'] = rand(11111, 99999);
-            $newApp['application_date'] = changeDateFormat('now', 'Y-m-d', true);
-            $newApp['applicationType'] = $applicationType;
-            $newApp['clientID'] = $userDetails->userID;
-            $app_id = $this->application_accessor->addNewApplication($newApp);
-            $appsDetails = $this->application_accessor->getApplicationDataById($app_id);
-            $data['applicationDetails'] = $appsDetails;
-        } else {
-            $app_id = $is_app_exists->applicationID;
-            $data['applicationDetails'] = $is_app_exists;
+
+        if ($this->input->post('submit')){
+
+            
+
+
+            $w_data['applicationID'] = $app_id;
+
+            $inv_opt = $this->input->post('investment_options');
+            switch ($inv_opt) {
+                case "IM Optimum Growth":
+                    $w_data['investment_options'] = "IM Optimum Growth";
+                    break;
+                case "IM Optimum Income":
+                    $w_data['investment_options'] = "IM Optimum Income";
+                    break;
+                case "IM Optimum Growth & Income":
+                    $w_data['investment_options'] = "IM Optimum Growth & Income";
+                    break;
+            };
+
+            $dup = $this->investment_accessor->investmentOptionsExists($w_data);
+
+
+            if ($dup) {
+                $this->session->set_flashdata("flash_msg", "Selected investment option already exists!");
+                redirect("client/$userUrl/investment/$app_id");
+            }
+            
+            $this->form_validation->set_rules('investment_options', 'Investment options', 'required');
+            $this->form_validation->set_rules('percentage_of_investment', 'Percentage of investment', 'required');
+            $this->form_validation->set_rules('target_dates', 'Target dates', 'required');
+
+            if ($this->form_validation->run()):
+                $newInvestment['applicationID'] = $app_id;
+                $newInvestment['investment_options'] = $inv_opt;
+                $newInvestment['percentage_of_investment'] = $this->input->post('percentage_of_investment');
+                $newInvestment['target_date'] = date("Y-m-d", strtotime($this->input->post('target_dates')));
+                $newInvestment['investmentReference'] = $random_no;
+
+                $InvestmentAdded = $this->investment_accessor->addNewInvestment($newInvestment);
+
+                if ($InvestmentAdded):
+                    // go to application overview
+                    redirect("client/$userUrl/application/$app_id");
+                endif;
+                
+            else:
+                
+                $this->index($userUrl, $app_id);
+            endif;
         }
-
-
-
-        if ($app_id):
-            // go to application overview
-            redirect('client/' . $userUrl . '/application/' . $app_id);
-        endif;
     }
 
 }

@@ -77,11 +77,16 @@ class Application_model extends CI_Model{
         return false;
     }
     
+    /*
+     * function to get a record
+     * @params userID
+     * @returns object or null
+     */
+    
      public function getClientByUserId($userID) {
 
         $this->db->where('userID', $userID);
-
-        return $this->db->get('clients')->result();
+        return $this->db->get('clients')->row();
     }
 
 }

@@ -56,16 +56,10 @@ class Transfer extends MY_Controller {
             return false;
         endif;
 
-        /**
-         * 
-         * @todo test that this application belogs to this client
-         * if yes continue to display the application overview page
-         */
+        
         $data['applicationDetails'] = $this->application_accessor->getApplicationDataById($applicationID);
         $data['transfer'] = $this->transfer_accessor->getTransferDataById($applicationID);
-
         $data['contribution'] = $this->contribution_accessor->getContributionsDataById($applicationID);
-        //list contribution
         $data['investment'] = $this->investment_accessor->getInvestmentDataById($applicationID);
 
 
@@ -78,7 +72,7 @@ class Transfer extends MY_Controller {
     }
 
     public function new_Transfer($userUrl = '', $applicationId) {
-        
+
         $userDetails = $this->user_accessor->getUser_customWhere(array('userBaseUrl' => $userUrl));
 
         if (empty($userDetails)):
@@ -87,31 +81,35 @@ class Transfer extends MY_Controller {
             redirect($_SERVER['HTTP_REFERER']);
             return false;
         endif;
-        
+
+        $this->load->library('form_validation');
         $app_id = $applicationId;
         
         
+         if ($this->input->post('submit')):
+            $this->form_validation->set_rules('pensionProvider', ' Pension Provider', 'required');
+            $this->form_validation->set_rules('transferReferrence', 'Transfer Referrence', 'required');
+            $this->form_validation->set_rules('approximateValue', 'Approximate Value', 'required');
 
+            if ($this->form_validation->run()):
         $newTransfer['applicationID'] = $app_id;
         $newTransfer['pensionProvider'] = $this->input->post('pensionProvider');
         $newTransfer['transferReferrence'] = $this->input->post('transferReferrence');
         $newTransfer['approximateValue'] = $this->input->post('approximateValue');
 
         $trasferAdded = $this->transfer_accessor->addNewTransfer($newTransfer);
-        
+
         if ($trasferAdded):
             // go to application overview
-            redirect('client/' . $userUrl . '/application/' . $app_id);
-        endif;
+          redirect("client/$userUrl/application/$app_id");
+                endif;
+                
+            else:
+                
+                $this->index($userUrl, $app_id);
+            endif;
+            endif;
+        
     }
-
-  
-
-
-
-       
-
-
-
 
 }

@@ -30,16 +30,17 @@
 		 </h3>
 		<?php if($transfer): ?>
 		<?php foreach($transfer as $rows): ?>
-		<p> Reference number for transfer <?php //echo $rows->transferReferrence; ?></p>
+		<p> Reference number for transfer <?php echo $rows->transferReferrence; ?></p>
 		<?php endforeach; ?>
 		<?php endif; ?>
 		<hr>
 		 <h3><b>New Contribution</b> Please add any Contribution details
-		 <a href="<?php //echo base_url("contributions/contribution/$app_id") ?>" class="btn btn-primary pull-right">Add</a>
+		 <a href="<?php echo base_url("client/".$userDetails->userBaseUrl."/contribution/".$applicationDetails->applicationID) ?>" class="btn btn-primary pull-right">Add</a>
 		 </h3>
 		<?php if($contribution): ?>
+		                
 		<?php foreach($contribution as $rows): ?>
-		<p>Reference number for contribution <?php //echo $rows->contributionsReference; ?></p>
+		<p>Reference number for contribution <?php echo $rows->contributionsReference; ?></p>
 		<?php endforeach; ?>
 		<?php endif; ?>
 		<hr>
@@ -50,11 +51,11 @@
 		 <button type="submit" class="btn btn-default pull-right">Add</button></h3>
 		<hr>
 		<h3><b>Investment Instruction</b> Please add Investment details
-		<a href="<?php //echo base_url("investments/investmentOptions/$app_id") ?>" class="btn btn-primary pull-right">Add</a>
+		<a href="<?php echo base_url("client/".$userDetails->userBaseUrl."/investment/".$applicationDetails->applicationID) ?>" class="btn btn-primary pull-right">Add</a>
 		</h3>
 		<?php if($investment): ?>
 		<?php foreach($investment as $rows): ?>
-		<p>Reference number for Investment <?php //echo $rows->investmentReference; ?></p>
+		<p>Reference number for Investment <?php echo $rows->investmentReference; ?></p>
 		<?php endforeach; ?>
 		<?php endif; ?>
 		<hr>

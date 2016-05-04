@@ -53,7 +53,7 @@
                     </div>
                 </div>
             </div>
-transferReferrence
+
         </div>
 
         <div class="form-group col-sm-offset-3">  
