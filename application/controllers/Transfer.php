@@ -5,7 +5,7 @@
  *
  * @author itischarles
  */
-class Application extends MY_Controller {
+class Transfer extends MY_Controller {
 
     var $user_accessor = ''; // to access the user model
     var $authorisation_accessor;
@@ -56,11 +56,7 @@ class Application extends MY_Controller {
             return false;
         endif;
 
-        /**
-         * 
-         * @todo test that this application belogs to this client
-         * if yes continue to display the application overview page
-         */
+        
         $data['applicationDetails'] = $this->application_accessor->getApplicationDataById($applicationID);
         $data['transfer'] = $this->transfer_accessor->getTransferDataById($applicationID);
         $data['contribution'] = $this->contribution_accessor->getContributionsDataById($applicationID);
@@ -71,11 +67,11 @@ class Application extends MY_Controller {
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/navbar', $data);
-        $this->load->view('application/overview', $data);
+        $this->load->view('application/transferForm', $data);
         $this->load->view('templates/footer', $data);
     }
 
-    public function new_Application($userUrl = '', $applicationType = '') {
+    public function new_Transfer($userUrl = '', $applicationId) {
 
         $userDetails = $this->user_accessor->getUser_customWhere(array('userBaseUrl' => $userUrl));
 
@@ -86,50 +82,34 @@ class Application extends MY_Controller {
             return false;
         endif;
 
-        $types = array('sipp', 'pension', 'isa', 'bond', 'gia');
-
-        if (!in_array($applicationType, $types)):
-            $this->session->set_flashdata('message', 'Invalid Application detected!!!');
-            $this->session->set_flashdata('type', 'flash_error');
-            redirect($_SERVER['HTTP_REFERER']);
-            return false;
-        endif;
-
-
-        /**
-         * @todo check if the user already has an application for this type
-         * if yes, stop and redirect with a message
-         * if no continue
-         */
-         $res = $this->application_accessor->getClientByUserId($userDetails->userID);
-         $clientID = $res->clientID;
-        
-        $wdata['applicationType'] = $applicationType;
-        $wdata['clientID'] = $clientID;
-      
+        $this->load->library('form_validation');
+        $app_id = $applicationId;
         
         
-        $is_app_exists = $this->application_accessor->isApplicationExists($wdata);
+         if ($this->input->post('submit')):
+            $this->form_validation->set_rules('pensionProvider', ' Pension Provider', 'required');
+            $this->form_validation->set_rules('transferReferrence', 'Transfer Referrence', 'required');
+            $this->form_validation->set_rules('approximateValue', 'Approximate Value', 'required');
 
-        if (!$is_app_exists) {
-            $newApp['applicationReference'] = rand(11111, 99999);
-            $newApp['application_date'] = changeDateFormat('now', 'Y-m-d', true);
-            $newApp['applicationType'] = $applicationType;
-            $newApp['clientID'] = $userDetails->userID;
-            $app_id = $this->application_accessor->addNewApplication($newApp);
-            $appsDetails = $this->application_accessor->getApplicationDataById($app_id);
-            $data['applicationDetails'] = $appsDetails;
-        } else {
-            $app_id = $is_app_exists->applicationID;
-            $data['applicationDetails'] = $is_app_exists;
-        }
+            if ($this->form_validation->run()):
+        $newTransfer['applicationID'] = $app_id;
+        $newTransfer['pensionProvider'] = $this->input->post('pensionProvider');
+        $newTransfer['transferReferrence'] = $this->input->post('transferReferrence');
+        $newTransfer['approximateValue'] = $this->input->post('approximateValue');
 
+        $trasferAdded = $this->transfer_accessor->addNewTransfer($newTransfer);
 
-
-        if ($app_id):
+        if ($trasferAdded):
             // go to application overview
-            redirect('client/' . $userUrl . '/application/' . $app_id);
-        endif;
+          redirect("client/$userUrl/application/$app_id");
+                endif;
+                
+            else:
+                
+                $this->index($userUrl, $app_id);
+            endif;
+            endif;
+        
     }
 
 }
