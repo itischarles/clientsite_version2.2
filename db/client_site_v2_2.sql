@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 02, 2016 at 06:04 PM
+-- Generation Time: May 06, 2016 at 10:55 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -29,7 +29,6 @@ USE `client_site_v2.2`;
 -- Table structure for table `active_users`
 --
 
-DROP TABLE IF EXISTS `active_users`;
 CREATE TABLE IF NOT EXISTS `active_users` (
 `active_users_id` int(11) NOT NULL,
   `last_active` datetime DEFAULT NULL,
@@ -44,7 +43,6 @@ CREATE TABLE IF NOT EXISTS `active_users` (
 -- Table structure for table `advisers`
 --
 
-DROP TABLE IF EXISTS `advisers`;
 CREATE TABLE IF NOT EXISTS `advisers` (
   `adviserID` int(11) NOT NULL,
   `adviserReference` varchar(45) DEFAULT NULL,
@@ -64,7 +62,6 @@ INSERT IGNORE INTO `advisers` (`adviserID`, `adviserReference`, `userID`) VALUES
 -- Table structure for table `adviser_has_client`
 --
 
-DROP TABLE IF EXISTS `adviser_has_client`;
 CREATE TABLE IF NOT EXISTS `adviser_has_client` (
 `adviserHasClientID` int(11) NOT NULL,
   `clientID` int(11) NOT NULL,
@@ -84,14 +81,13 @@ INSERT IGNORE INTO `adviser_has_client` (`adviserHasClientID`, `clientID`, `advi
 -- Table structure for table `applications`
 --
 
-DROP TABLE IF EXISTS `applications`;
 CREATE TABLE IF NOT EXISTS `applications` (
 `applicationID` int(11) NOT NULL,
   `applicationType` varchar(15) NOT NULL,
   `applicationReference` varchar(45) NOT NULL,
   `clientID` int(11) NOT NULL,
   `application_date` date NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `applications`
@@ -101,7 +97,9 @@ INSERT IGNORE INTO `applications` (`applicationID`, `applicationType`, `applicat
 (1, 'sipp', '70646', 1, '2016-05-02'),
 (4, 'sipp', '55841', 1, '2016-05-02'),
 (5, 'sipp', '68475', 1, '2016-05-02'),
-(6, 'sipp', '82930', 1, '2016-05-02');
+(6, 'sipp', '82930', 1, '2016-05-02'),
+(7, 'isa', '57089', 1, '2016-05-06'),
+(8, 'gia', '97582', 1, '2016-05-06');
 
 -- --------------------------------------------------------
 
@@ -109,7 +107,6 @@ INSERT IGNORE INTO `applications` (`applicationID`, `applicationType`, `applicat
 -- Table structure for table `audit_logins`
 --
 
-DROP TABLE IF EXISTS `audit_logins`;
 CREATE TABLE IF NOT EXISTS `audit_logins` (
 `auditLoginID` int(11) NOT NULL,
   `sourceIP` varchar(16) NOT NULL,
@@ -133,7 +130,6 @@ INSERT IGNORE INTO `audit_logins` (`auditLoginID`, `sourceIP`, `loginSuccessful`
 -- Table structure for table `auth_permissions`
 --
 
-DROP TABLE IF EXISTS `auth_permissions`;
 CREATE TABLE IF NOT EXISTS `auth_permissions` (
 `permID` int(10) unsigned NOT NULL,
   `permDesc` varchar(50) NOT NULL
@@ -156,7 +152,6 @@ INSERT IGNORE INTO `auth_permissions` (`permID`, `permDesc`) VALUES
 -- Table structure for table `auth_roles`
 --
 
-DROP TABLE IF EXISTS `auth_roles`;
 CREATE TABLE IF NOT EXISTS `auth_roles` (
 `roleID` int(10) unsigned NOT NULL,
   `roleName` varchar(50) NOT NULL
@@ -177,7 +172,6 @@ INSERT IGNORE INTO `auth_roles` (`roleID`, `roleName`) VALUES
 -- Table structure for table `auth_role_perm`
 --
 
-DROP TABLE IF EXISTS `auth_role_perm`;
 CREATE TABLE IF NOT EXISTS `auth_role_perm` (
   `roleID` int(10) unsigned NOT NULL,
   `permID` int(10) unsigned NOT NULL
@@ -200,7 +194,6 @@ INSERT IGNORE INTO `auth_role_perm` (`roleID`, `permID`) VALUES
 -- Table structure for table `auth_user_role`
 --
 
-DROP TABLE IF EXISTS `auth_user_role`;
 CREATE TABLE IF NOT EXISTS `auth_user_role` (
   `userID` int(11) NOT NULL,
   `roleID` int(10) unsigned NOT NULL
@@ -220,7 +213,6 @@ INSERT IGNORE INTO `auth_user_role` (`userID`, `roleID`) VALUES
 -- Table structure for table `clients`
 --
 
-DROP TABLE IF EXISTS `clients`;
 CREATE TABLE IF NOT EXISTS `clients` (
 `clientID` int(11) NOT NULL,
   `adviserID` int(11) NOT NULL,
@@ -242,20 +234,30 @@ INSERT IGNORE INTO `clients` (`clientID`, `adviserID`, `clientReference`, `clien
 -- Table structure for table `contributions`
 --
 
-DROP TABLE IF EXISTS `contributions`;
 CREATE TABLE IF NOT EXISTS `contributions` (
 `contributionID` int(11) NOT NULL,
   `applicationID` int(11) NOT NULL,
-  `fund_type` varchar(255) NOT NULL,
-  `lump_sum_amount` varchar(255) NOT NULL,
-  `regular_amount` varchar(255) NOT NULL,
-  `frequency_regular` varchar(255) NOT NULL,
-  `account_holder` varchar(255) NOT NULL,
-  `society_account_holder` varchar(255) NOT NULL,
-  `sorrt_code` varchar(45) NOT NULL,
-  `postal_address` varchar(255) NOT NULL,
-  `contributionsReference` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `lumpSumAmount` decimal(10,2) DEFAULT NULL,
+  `regularContributionAmount` decimal(10,2) DEFAULT NULL,
+  `regularContributionfrequency` varchar(45) DEFAULT NULL,
+  `bankAccountHolder` varchar(255) DEFAULT NULL,
+  `bankAccountNumber` varchar(15) DEFAULT NULL,
+  `bankSortCode` varchar(45) DEFAULT NULL,
+  `bankName` varchar(45) DEFAULT NULL,
+  `bankAddressLine1` varchar(65) DEFAULT NULL,
+  `bankAddressLine2` varchar(65) DEFAULT NULL,
+  `bankAddressLine3` varchar(65) DEFAULT NULL,
+  `bankAddressTownCity` varchar(45) DEFAULT NULL,
+  `bankPostCode` varchar(15) DEFAULT NULL,
+  `bankAddressCounty` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `contributions`
+--
+
+INSERT IGNORE INTO `contributions` (`contributionID`, `applicationID`, `lumpSumAmount`, `regularContributionAmount`, `regularContributionfrequency`, `bankAccountHolder`, `bankAccountNumber`, `bankSortCode`, `bankName`, `bankAddressLine1`, `bankAddressLine2`, `bankAddressLine3`, `bankAddressTownCity`, `bankPostCode`, `bankAddressCounty`) VALUES
+(4, 1, '56666.00', '0.00', 'Annually', '', '', '', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -263,7 +265,6 @@ CREATE TABLE IF NOT EXISTS `contributions` (
 -- Table structure for table `docs_view_history`
 --
 
-DROP TABLE IF EXISTS `docs_view_history`;
 CREATE TABLE IF NOT EXISTS `docs_view_history` (
 `docsViewHistoryID` int(11) NOT NULL,
   `docViewHistoryDate` datetime DEFAULT NULL,
@@ -279,7 +280,6 @@ CREATE TABLE IF NOT EXISTS `docs_view_history` (
 -- Table structure for table `document`
 --
 
-DROP TABLE IF EXISTS `document`;
 CREATE TABLE IF NOT EXISTS `document` (
 `documentID` int(11) NOT NULL,
   `docName` varchar(155) NOT NULL,
@@ -297,7 +297,6 @@ CREATE TABLE IF NOT EXISTS `document` (
 -- Table structure for table `email`
 --
 
-DROP TABLE IF EXISTS `email`;
 CREATE TABLE IF NOT EXISTS `email` (
 `emailMessageID` int(10) NOT NULL,
   `emailMessageFrom` varchar(50) DEFAULT NULL,
@@ -316,7 +315,6 @@ CREATE TABLE IF NOT EXISTS `email` (
 -- Table structure for table `glossary`
 --
 
-DROP TABLE IF EXISTS `glossary`;
 CREATE TABLE IF NOT EXISTS `glossary` (
 `idglossary` int(11) NOT NULL,
   `term` varchar(45) NOT NULL,
@@ -329,15 +327,45 @@ CREATE TABLE IF NOT EXISTS `glossary` (
 -- Table structure for table `investment_intructions`
 --
 
-DROP TABLE IF EXISTS `investment_intructions`;
 CREATE TABLE IF NOT EXISTS `investment_intructions` (
-`investmentIntructionID` int(11) NOT NULL,
-  `applicationID` int(11) NOT NULL,
-  `investment_options` varchar(255) NOT NULL,
-  `percentage_of_investment` varchar(255) NOT NULL,
-  `target_date` date NOT NULL,
-  `investmentReference` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+`investmentInstructionID` int(11) NOT NULL,
+  `applicationID` int(11) DEFAULT NULL,
+  `investmentPercent` decimal(10,2) NOT NULL,
+  `investmentTargetDate` date DEFAULT NULL,
+  `investmentTypeID` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `investment_intructions`
+--
+
+INSERT IGNORE INTO `investment_intructions` (`investmentInstructionID`, `applicationID`, `investmentPercent`, `investmentTargetDate`, `investmentTypeID`) VALUES
+(1, 1, '10.00', '2016-05-24', 2),
+(2, 1, '7.00', '2016-05-19', 3),
+(3, NULL, '4.00', '2016-05-20', 2),
+(4, NULL, '4.00', '2016-05-26', 2),
+(5, 1, '1.00', '2016-05-26', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `investment_type`
+--
+
+CREATE TABLE IF NOT EXISTS `investment_type` (
+`investmentTypeID` int(11) NOT NULL,
+  `investmentTypeName` varchar(45) DEFAULT NULL,
+  `investmentTypeReference` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `investment_type`
+--
+
+INSERT IGNORE INTO `investment_type` (`investmentTypeID`, `investmentTypeName`, `investmentTypeReference`) VALUES
+(1, 'IM Optimum Growth', 'IMOPG'),
+(2, 'IM Optimum Growth & Income', 'IMOPGI'),
+(3, 'IM Optimum Income', 'IMOPI');
 
 -- --------------------------------------------------------
 
@@ -345,7 +373,6 @@ CREATE TABLE IF NOT EXISTS `investment_intructions` (
 -- Table structure for table `login_blacklist`
 --
 
-DROP TABLE IF EXISTS `login_blacklist`;
 CREATE TABLE IF NOT EXISTS `login_blacklist` (
 `loginBlacklistID` int(11) NOT NULL,
   `ipaddress` varchar(16) NOT NULL,
@@ -360,7 +387,6 @@ CREATE TABLE IF NOT EXISTS `login_blacklist` (
 -- Table structure for table `messages`
 --
 
-DROP TABLE IF EXISTS `messages`;
 CREATE TABLE IF NOT EXISTS `messages` (
 `messageID` int(10) NOT NULL,
   `messageDate` datetime DEFAULT NULL,
@@ -376,7 +402,6 @@ CREATE TABLE IF NOT EXISTS `messages` (
 -- Table structure for table `terms_definitions`
 --
 
-DROP TABLE IF EXISTS `terms_definitions`;
 CREATE TABLE IF NOT EXISTS `terms_definitions` (
 `terms_definitionID` int(11) NOT NULL,
   `terms` varchar(155) NOT NULL,
@@ -389,14 +414,21 @@ CREATE TABLE IF NOT EXISTS `terms_definitions` (
 -- Table structure for table `transfers`
 --
 
-DROP TABLE IF EXISTS `transfers`;
 CREATE TABLE IF NOT EXISTS `transfers` (
 `transferID` int(11) NOT NULL,
   `applicationID` int(11) NOT NULL,
   `pensionProvider` varchar(255) NOT NULL,
   `transferReferrence` varchar(45) NOT NULL,
   `approximateValue` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `transfers`
+--
+
+INSERT IGNORE INTO `transfers` (`transferID`, `applicationID`, `pensionProvider`, `transferReferrence`, `approximateValue`) VALUES
+(1, 1, 'ABCd', '1234', '234000'),
+(2, 1, 'ABCt', 'ssdsds', '76767676');
 
 -- --------------------------------------------------------
 
@@ -404,11 +436,10 @@ CREATE TABLE IF NOT EXISTS `transfers` (
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
 `userID` int(10) NOT NULL,
   `userIsActive` int(1) NOT NULL DEFAULT '0',
-  `userTtitle` varchar(45) DEFAULT NULL,
+  `userTitle` varchar(45) DEFAULT NULL,
   `userFirstName` varchar(45) DEFAULT NULL,
   `userLastName` varchar(45) DEFAULT NULL,
   `userDOB` date DEFAULT NULL,
@@ -425,17 +456,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   `userPwordHash` varchar(65) DEFAULT NULL,
   `userPasswordChanged` int(1) NOT NULL DEFAULT '0',
   `userBaseUrl` varchar(85) NOT NULL COMMENT 'unique code to identify client',
-  `userDateCreated` date DEFAULT NULL,
-  `groupID` int(11) NOT NULL
+  `userDateCreated` date DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT IGNORE INTO `users` (`userID`, `userIsActive`, `userTtitle`, `userFirstName`, `userLastName`, `userDOB`, `userAddressLine1`, `userAddressLine2`, `userPostcode`, `userCounty`, `userTown`, `userTel`, `userMobile`, `userEmail`, `userNinum`, `userUsername`, `userPwordHash`, `userPasswordChanged`, `userBaseUrl`, `userDateCreated`, `groupID`) VALUES
-(1, 1, 'mr', 'adv1', 'user1', '2006-12-12', 'asdf', 'asdfsf', '12313', 'india', 'town', '1231414', '123214124', 'adv1user1@gp.com', '213213', 'adv1user1', '$2y$10$ISalZprMNt4OuUi1h9FCv.SDifLd2dC54fFKbdUGq7B/iN6klUol2', 0, 'asdf', '2016-04-22', 1),
-(2, 2, 'mr', 'client2', 'user2', '2006-12-12', '123', '1123', '123', 'india', 'town', '67896789', '6879679', 'client2user2@gp.com', '567567', 'adv2user2', '$2y$10$ISalZprMNt4OuUi1h9FCv.SDifLd2dC54fFKbdUGq7B/iN6klUol2', 0, 'asdf1', '2016-04-22', 1);
+INSERT IGNORE INTO `users` (`userID`, `userIsActive`, `userTitle`, `userFirstName`, `userLastName`, `userDOB`, `userAddressLine1`, `userAddressLine2`, `userPostcode`, `userCounty`, `userTown`, `userTel`, `userMobile`, `userEmail`, `userNinum`, `userUsername`, `userPwordHash`, `userPasswordChanged`, `userBaseUrl`, `userDateCreated`) VALUES
+(1, 1, 'mr', 'adv1', 'user1', '2006-12-12', 'asdf', 'asdfsf', '12313', 'india', 'town', '1231414', '123214124', 'adv1user1@gp.com', '213213', 'adv1user1', '$2y$10$ISalZprMNt4OuUi1h9FCv.SDifLd2dC54fFKbdUGq7B/iN6klUol2', 0, 'asdf', '2016-04-22'),
+(2, 2, 'mr', 'client2', 'user2', '2006-12-12', '123', '1123', '123', 'india', 'town', '67896789', '6879679', 'client2user2@gp.com', '567567', 'adv2user2', '$2y$10$ISalZprMNt4OuUi1h9FCv.SDifLd2dC54fFKbdUGq7B/iN6klUol2', 0, 'asdf1', '2016-04-22');
 
 -- --------------------------------------------------------
 
@@ -443,7 +473,6 @@ INSERT IGNORE INTO `users` (`userID`, `userIsActive`, `userTtitle`, `userFirstNa
 -- Table structure for table `user_group`
 --
 
-DROP TABLE IF EXISTS `user_group`;
 CREATE TABLE IF NOT EXISTS `user_group` (
 `groupID` int(11) NOT NULL,
   `groupName` varchar(45) DEFAULT NULL
@@ -554,7 +583,13 @@ ALTER TABLE `glossary`
 -- Indexes for table `investment_intructions`
 --
 ALTER TABLE `investment_intructions`
- ADD PRIMARY KEY (`investmentIntructionID`), ADD KEY `fk_investment_intructions_applications1_idx` (`applicationID`);
+ ADD PRIMARY KEY (`investmentInstructionID`), ADD KEY `fk_investment_intructions_applications1_idx` (`applicationID`), ADD KEY `fk_investment_intructions_1_idx` (`investmentTypeID`);
+
+--
+-- Indexes for table `investment_type`
+--
+ALTER TABLE `investment_type`
+ ADD PRIMARY KEY (`investmentTypeID`);
 
 --
 -- Indexes for table `login_blacklist`
@@ -584,7 +619,7 @@ ALTER TABLE `transfers`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
- ADD PRIMARY KEY (`userID`), ADD KEY `fk_users_userGroup1_idx` (`groupID`);
+ ADD PRIMARY KEY (`userID`);
 
 --
 -- Indexes for table `user_group`
@@ -610,7 +645,7 @@ MODIFY `adviserHasClientID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-MODIFY `applicationID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+MODIFY `applicationID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `audit_logins`
 --
@@ -635,7 +670,7 @@ MODIFY `clientID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `contributions`
 --
 ALTER TABLE `contributions`
-MODIFY `contributionID` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `contributionID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `docs_view_history`
 --
@@ -660,7 +695,12 @@ MODIFY `idglossary` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `investment_intructions`
 --
 ALTER TABLE `investment_intructions`
-MODIFY `investmentIntructionID` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `investmentInstructionID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `investment_type`
+--
+ALTER TABLE `investment_type`
+MODIFY `investmentTypeID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `login_blacklist`
 --
@@ -680,7 +720,7 @@ MODIFY `terms_definitionID` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `transfers`
 --
 ALTER TABLE `transfers`
-MODIFY `transferID` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `transferID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -690,7 +730,17 @@ MODIFY `userID` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 -- AUTO_INCREMENT for table `user_group`
 --
 ALTER TABLE `user_group`
-MODIFY `groupID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;SET FOREIGN_KEY_CHECKS=1;
+MODIFY `groupID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `investment_intructions`
+--
+ALTER TABLE `investment_intructions`
+ADD CONSTRAINT `fk_investment_intructions_1` FOREIGN KEY (`investmentTypeID`) REFERENCES `investment_type` (`investmentTypeID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+SET FOREIGN_KEY_CHECKS=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
