@@ -80,7 +80,9 @@ h4{
 .col-100{
     width: 100%
 }
-
+.pointer{
+    cursor: pointer;
+}
 
 
 /**HEADER******/
@@ -126,7 +128,37 @@ h4{
     border-color: #b9a875;
     color: #fff;
 }
+.red-notice {
+    color: #ae0000;
+    font-size: 11px;
+}
+.input-is-required{
+     color: #ae0000;
+/*    font-size: 11px;*/
+}
+.login{
+    padding: 17px;
+}
 
+/*form.reg-form .form-group{
+    margin-left: 3em;
+}*/
+form label {
+    display: inline-block;
+    width: 163px;
+      vertical-align: top;
+}
+form h3{
+    font-size: 17px;
+}
+
+form .form-padding-right-4{
+    padding-right: 4em;
+}
+
+.form_filter {
+    margin: 1em 0;
+}
 
 
 /**SIDEBAR**/

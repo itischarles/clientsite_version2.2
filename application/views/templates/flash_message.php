@@ -8,6 +8,9 @@
          $class = "alert-danger";
      elseif($this->session->flashdata('type') == "flash_success"):
          $class = "alert-success";
+    
+    elseif($this->session->flashdata('type') == "flash_warning"):
+         $class = "alert-warning";
      else:
          $class = "alert-info";
      endif;

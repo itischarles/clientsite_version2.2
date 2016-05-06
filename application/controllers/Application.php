@@ -56,15 +56,20 @@ class Application extends MY_Controller {
             return false;
         endif;
 
-        /**
-         * 
-         * @todo test that this application belogs to this client
-         * if yes continue to display the application overview page
-         */
-        $data['applicationDetails'] = $this->application_accessor->getApplicationDataById($applicationID);
-        $data['transfer'] = $this->transfer_accessor->getTransferDataById($applicationID);
-        $data['contribution'] = $this->contribution_accessor->getContributionsDataById($applicationID);
-        $data['investment'] = $this->investment_accessor->getInvestmentDataById($applicationID);
+
+        $data['applicationDetails']= $applicationDetails = $this->application_accessor->getByClientID($applicationID, $userDetails->clientID);
+       
+	if (empty($applicationDetails)):
+            $this->session->set_flashdata('message', 'Invalid selected detected!!!');
+            $this->session->set_flashdata('type', 'flash_error');
+            redirect($_SERVER['HTTP_REFERER']);
+            return false;
+        endif;
+	
+	
+	$data['transfers'] = $this->transfer_accessor->listByApplicationID($applicationID);
+        $data['contributions'] = $this->contribution_accessor->listByApplicationID($applicationID);
+        $data['investments'] = $this->investment_accessor->listByApplicationID($applicationID);
 
 
         $data['show_uploadLink'] = true;
@@ -74,6 +79,8 @@ class Application extends MY_Controller {
         $this->load->view('application/overview', $data);
         $this->load->view('templates/footer', $data);
     }
+    
+    
 
     public function new_Application($userUrl = '', $applicationType = '') {
 
@@ -101,11 +108,10 @@ class Application extends MY_Controller {
          * if yes, stop and redirect with a message
          * if no continue
          */
-         $res = $this->application_accessor->getClientByUserId($userDetails->userID);
-         $clientID = $res->clientID;
+       
         
         $wdata['applicationType'] = $applicationType;
-        $wdata['clientID'] = $clientID;
+        $wdata['clientID'] = $userDetails->clientID;
       
         
         
@@ -114,10 +120,10 @@ class Application extends MY_Controller {
         if (!$is_app_exists) {
             $newApp['applicationReference'] = rand(11111, 99999);
             $newApp['application_date'] = changeDateFormat('now', 'Y-m-d', true);
-            $newApp['applicationType'] = $applicationType;
-            $newApp['clientID'] = $userDetails->userID;
+            $newApp['applicationType'] = strtoupper($applicationType);
+            $newApp['clientID'] = $userDetails->clientID;
             $app_id = $this->application_accessor->addNewApplication($newApp);
-            $appsDetails = $this->application_accessor->getApplicationDataById($app_id);
+            $appsDetails = $this->application_accessor->getById($app_id);
             $data['applicationDetails'] = $appsDetails;
         } else {
             $app_id = $is_app_exists->applicationID;
@@ -128,7 +134,7 @@ class Application extends MY_Controller {
 
         if ($app_id):
             // go to application overview
-            redirect('client/' . $userUrl . '/application/' . $app_id);
+            redirect(base_url(). 'client/' . $userUrl . '/application/' . $app_id);
         endif;
     }
 

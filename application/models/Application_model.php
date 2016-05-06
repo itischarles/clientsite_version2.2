@@ -8,8 +8,12 @@
  */
 class Application_model extends CI_Model{
  
+     private $table = 'applications';
+     
     function __construct() {
         parent::__construct();
+	
+	
     }
     
      
@@ -24,7 +28,7 @@ class Application_model extends CI_Model{
 
     function addNewApplication($data) {
 
-        $this->db->insert('applications', $data);
+        $this->db->insert($this->table, $data);
         return $this->db->insert_id();
     }
     
@@ -38,7 +42,7 @@ class Application_model extends CI_Model{
 
     function isApplicationExists($data) {
         $this->db->where($data);
-        $res = $this->db->get("applications");
+        $res = $this->db->get($this->table);
         if ($res) {
             return $res->row();
         }
@@ -46,47 +50,55 @@ class Application_model extends CI_Model{
     }
 
    
+     function getByID($applicationID) {
+        return $this->db->where('applicationID', $applicationID)
+                        ->get($this->table, 1)
+                        ->row();
+    }
 
-    /*
-     * function to get all records of application table
-     * @params clientID
-     * @returns object or null
-     */
+    function getByReference($applicationReference)  {
+        return $this->db->where('applicationReference', $applicationReference)
+                        ->get($this->table, 1)
+                        ->row();
+    }
 
-    public function getMyApplication($clientID) {
-        $this->db->where('clientID', $clientID);
-        $res = $this->db->get('applications');
-        if ($res) {
-            return $res->row();
-        }
-        return false;
+    function getBySchemeAccountNumber($schemeAccountNumber){
+        return $this->db->where('schemeAccountNumber', $schemeAccountNumber)
+        ->get($this->table, 1)
+        ->row();
     }
     
-    /*
-     * function to get a record
-     * @params app_id
-     * @returns object or null
-     */
-
-    public function getApplicationDataById($app_id) {
-        $this->db->where('applicationID', $app_id);
-        $res = $this->db->get('applications');
-        if ($res) {
-            return $res->row();
-        }
-        return false;
+     function getByClientID( $applicationID = 0, $clientID = 0) {
+	 $this->db->where('applicationID', $applicationID);
+        return $this->db->where('clientID', $clientID)
+                        ->get($this->table)->row();
     }
-    
-    /*
-     * function to get a record
-     * @params userID
-     * @returns object or null
-     */
-    
-     public function getClientByUserId($userID) {
 
-        $this->db->where('userID', $userID);
-        return $this->db->get('clients')->row();
+    function getAllByClientID($clientID){
+        return $this->db->where('clientID', $clientID)
+                        ->get($this->table)
+                        ->result();
+    }
+
+    
+
+        /**
+     * basically you are checking if this application request belongs to this client
+     * 
+     * @return boolean
+     */
+    function isAvalidRequest($clientID, $applicationID){
+
+	$isValid['applications.applicationID'] = $applicationID;
+	$isValid['clientID'] = $clientID;
+	
+	 $this->db->where($isValid);       
+        if( $this->db->count_all_results($this->table) < 1):
+            return false;
+        endif;
+        
+        return true;
+	
     }
 
 }

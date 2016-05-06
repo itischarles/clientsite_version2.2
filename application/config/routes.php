@@ -66,15 +66,12 @@ $route['client/(:any)/document/(:num)'] = "Document/view_documents/$1/$2";
 $route['client/(:any)'] = "Users/userDashboard/$1";
 $route['search-clients'] = "Users/searchUsers";
 $route['client/(:any)/upload-documents'] = "Users/manualUploadDocument/$1";
+$route['add-new-client'] = "Users/addNewUser";
 
 
 
 
 /*********APPLICATIONS *********/
-//$route['client/(:any)/application/new/sipp'] = "Application/new_Application/$1/$2";
-//$route['client/(:any)/application/new/isa'] = "Application/new_Application/$1/$2";
-//$route['client/(:any)/application/new/gia'] = "Application/new_Application/$1/$2";
-
 
 $types = array('sipp', 'pension', 'isa', 'bond', 'gia');
 
@@ -84,15 +81,24 @@ foreach ($types as $key => $type){
    // $route['client/(:any)/illustrations/new/' . $type . '/(:num)'] = "illustration/new_illustration/$1/" . $type . "/$2";
 
     $route['client/(:any)/application/new/' . $type] = "Application/new_Application/$1/" . $type;
-    $route['client/(:any)/transfer/new/(:num)'] = "Transfer/new_Transfer/$1/$2";
-    $route['client/(:any)/contribution/new/(:num)'] = "Contribution/new_Contribution/$1/$2";
-    $route['client/(:any)/investment/new/(:num)'] = "Investment/new_Investment/$1/$2";
 }
 
+
 $route['client/(:any)/application/(:num)'] = "Application/index/$1/$2";
-$route['client/(:any)/transfer/(:num)'] = "Transfer/index/$1/$2";
-$route['client/(:any)/contribution/(:num)'] = "Contribution/index/$1/$2";
-$route['client/(:any)/investment/(:num)'] = "Investment/index/$1/$2";
+
+
+$route['client/(:any)/application/(:num)/transfer/new'] = "Transfer/new_Transfer/$1/$2";
+$route['client/(:any)/application/(:num)/transfer/(:num)/edit'] = "Transfer/edit_Transfer/$1/$2/$3";
+$route['client/(:any)/application/(:num)/transfer/(:num)'] = "Transfer/index/$1/$2/$3";
+
+$route['client/(:any)/application/(:num)/contribution/new'] = "Contribution/new_Contribution/$1/$2";
+$route['client/(:any)/application/(:num)/contribution/(:num)/edit'] = "Contribution/edit_Contribution/$1/$2/$3";
+$route['client/(:any)/application/(:num)/contribution/(:num)'] = "Contribution/index/$1/$2/$3";
+
+$route['client/(:any)/application/(:num)/investment/new'] = "Investment/new_Investment/$1/$2";
+$route['client/(:any)/application/(:num)/investment/(:num)/edit'] = "Investment/edit_Investment/$1/$2/$3";
+$route['client/(:any)/application/(:num)/investment/(:num)'] = "Investment/index/$1/$2/$3";
+
 
 
 

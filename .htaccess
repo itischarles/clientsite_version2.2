@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /client-site/v2/
+    RewriteBase /im-client-site/svn-v2.2/trunk/
 
     #Removes access to the system folder by users.
     #Additionally this will allow you to create a System.php controller,

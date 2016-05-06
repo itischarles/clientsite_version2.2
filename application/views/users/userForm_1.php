@@ -8,7 +8,7 @@
 
     <div class="row ">
 	  <div class="col-md-3 sidebar">
-         <?php $this->load->view('users/sidebar');?>       
+         <?php //$this->load->view('users/sidebar');?>       
         </div>
 	
         <div class="col-md-9 main-content-divier-right bg-white">            

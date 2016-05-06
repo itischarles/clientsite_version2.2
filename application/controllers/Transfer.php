@@ -45,7 +45,7 @@ class Transfer extends MY_Controller {
      * @param int $applicationID
      * @return boolean
      */
-    public function index($userUrl = '', $applicationID = 0) {
+    public function index($userUrl = '', $applicationID = 0, $transferID) {
 
         $data['userDetails'] = $userDetails = $this->user_accessor->getUser_customWhere(array('userBaseUrl' => $userUrl));
 
@@ -56,24 +56,97 @@ class Transfer extends MY_Controller {
             return false;
         endif;
 
+	$isValid['applications.applicationID'] = $applicationID;
+	$isValid['transferID'] = $transferID;
+	$isValid['clientID'] = $userDetails->clientID;
+	
+	if($this->transfer_accessor->isAvalidRequest($isValid === false)):
+	    $this->session->set_flashdata('message', 'invalid Request detected!!!');
+            $this->session->set_flashdata('type', 'flash_error');
+            redirect($_SERVER['HTTP_REFERER']);
+            return false;
+	endif;
         
-        $data['applicationDetails'] = $this->application_accessor->getApplicationDataById($applicationID);
-        $data['transfer'] = $this->transfer_accessor->getTransferDataById($applicationID);
-        $data['contribution'] = $this->contribution_accessor->getContributionsDataById($applicationID);
-        $data['investment'] = $this->investment_accessor->getInvestmentDataById($applicationID);
-
+        $data['applicationDetails'] = $this->application_accessor->getByID($applicationID);
+        $data['transfer'] = $this->transfer_accessor->getByID($transferID);
+       
 
         $data['show_uploadLink'] = true;
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/navbar', $data);
-        $this->load->view('application/transferForm', $data);
+        $this->load->view('transfers/viewTransfer', $data);
         $this->load->view('templates/footer', $data);
     }
+    
+    
 
-    public function new_Transfer($userUrl = '', $applicationId) {
+    public function new_Transfer($userUrl = '', $applicationID =0) {
 
         $userDetails = $this->user_accessor->getUser_customWhere(array('userBaseUrl' => $userUrl));
+	$applicationDetails = $this->application_accessor->getByClientID($applicationID, $userDetails->clientID);
+	
+        if (empty($userDetails) || empty($applicationDetails)):
+            $this->session->set_flashdata('message', 'invalid request detected!!!');
+            $this->session->set_flashdata('type', 'flash_error');
+            redirect($_SERVER['HTTP_REFERER']);
+            return false;
+        endif;
+	
+	if ($this->input->post('submit')):
+            $this->form_validation->set_rules('pensionProvider', ' Pension Provider', 'required');
+            $this->form_validation->set_rules('transferReferrence', 'Transfer Referrence', 'required');
+            $this->form_validation->set_rules('approximateValue', 'Approximate Value', 'required');
+	    
+	    $this->form_validation->set_error_delimiters( '<p class="error_text">','</p>' );
+
+            if ($this->form_validation->run()):
+		$newTransfer['applicationID'] = $applicationID;
+		$newTransfer['pensionProvider'] = $this->input->post('pensionProvider');
+		$newTransfer['transferReferrence'] = $this->input->post('transferReferrence');
+		$newTransfer['approximateValue'] = price_format_DB($this->input->post('approximateValue'));
+
+		//$$this->transfer_accessor->addNewTransfer($newTransfer)
+	
+		if ($this->transfer_accessor->addNewTransfer($newTransfer)):
+		    // go to application overview
+		    $this->session->set_flashdata('message', 'Transfer added successfully!!!');
+		    $this->session->set_flashdata('type', 'flash_success');
+		else:
+		     $this->session->set_flashdata('message', 'Unknown error detected!!!');
+		    $this->session->set_flashdata('type', 'flash_warning');
+		endif;
+		
+		redirect(base_url("client/$userUrl/application/$applicationID"));
+	    endif;
+        endif;
+	
+
+	
+	$data['applicationDetails'] = $applicationDetails;
+	$data['userDetails'] = $userDetails;
+       // $data['transfer'] = $this->transfer_accessor->getByID($transferID);
+        $data['mode'] = "New";
+
+        $data['show_uploadLink'] = true;
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar', $data);
+        $this->load->view('transfers/transferForm', $data);
+        $this->load->view('templates/footer', $data);
+        
+    }
+    
+
+        /**
+     * display the application overview for this client
+     * @param string $userUrl
+     * @param int $applicationID
+     * @return boolean
+     */
+    public function edit_Transfer($userUrl = '', $applicationID = 0, $transferID) {
+
+        $data['userDetails'] = $userDetails = $this->user_accessor->getUser_customWhere(array('userBaseUrl' => $userUrl));
 
         if (empty($userDetails)):
             $this->session->set_flashdata('message', 'User Not found!!!');
@@ -82,34 +155,59 @@ class Transfer extends MY_Controller {
             return false;
         endif;
 
-        $this->load->library('form_validation');
-        $app_id = $applicationId;
-        
-        
-         if ($this->input->post('submit')):
+	$isValid['applications.applicationID'] = $applicationID;
+	$isValid['transferID'] = $transferID;
+	$isValid['clientID'] = $userDetails->clientID;
+	
+	if($this->transfer_accessor->isAvalidRequest($isValid === false)):
+	    $this->session->set_flashdata('message', 'invalid Request detected!!!');
+            $this->session->set_flashdata('type', 'flash_error');
+            redirect($_SERVER['HTTP_REFERER']);
+            return false;
+	endif;
+	
+	
+	if ($this->input->post('submit')):
             $this->form_validation->set_rules('pensionProvider', ' Pension Provider', 'required');
             $this->form_validation->set_rules('transferReferrence', 'Transfer Referrence', 'required');
             $this->form_validation->set_rules('approximateValue', 'Approximate Value', 'required');
+	    
+	    $this->form_validation->set_error_delimiters( '<p class="error_text">','</p>' );
 
             if ($this->form_validation->run()):
-        $newTransfer['applicationID'] = $app_id;
-        $newTransfer['pensionProvider'] = $this->input->post('pensionProvider');
-        $newTransfer['transferReferrence'] = $this->input->post('transferReferrence');
-        $newTransfer['approximateValue'] = $this->input->post('approximateValue');
+		//$newTransfer['applicationID'] = $applicationId;
+		$updateTransfer['pensionProvider'] = $this->input->post('pensionProvider');
+		$updateTransfer['transferReferrence'] = $this->input->post('transferReferrence');
+		$updateTransfer['approximateValue'] = $this->input->post('approximateValue');
 
-        $trasferAdded = $this->transfer_accessor->addNewTransfer($newTransfer);
-
-        if ($trasferAdded):
-            // go to application overview
-          redirect("client/$userUrl/application/$app_id");
-                endif;
-                
-            else:
-                
-                $this->index($userUrl, $app_id);
-            endif;
-            endif;
+		$updateWhere['applicationID'] = $applicationID;
+		$updateWhere['transferID'] = $transferID;
+	
+		if ($this->transfer_accessor->updateTransfer($updateTransfer, $updateWhere)):
+		    // go to application overview
+		    $this->session->set_flashdata('message', 'Transfer updated successfully!!!');
+		    $this->session->set_flashdata('type', 'flash_success');
+		else:
+		     $this->session->set_flashdata('message', 'No changes detected!!!');
+		    $this->session->set_flashdata('type', 'flash_warning');
+		endif;
+		
+		redirect(base_url("client/$userUrl/application/$applicationID/transfer/$transferID"));
+	    endif;
+        endif;
+	
+	
         
+        $data['applicationDetails'] = $this->application_accessor->getByID($applicationID);
+        $data['transfer'] = $this->transfer_accessor->getByID($transferID);
+        $data['mode'] = "Edit";
+
+        $data['show_uploadLink'] = true;
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar', $data);
+        $this->load->view('transfers/transferForm', $data);
+        $this->load->view('templates/footer', $data);
     }
 
 }

@@ -1,5 +1,4 @@
 
-  
 
 <div class="container-fluid page-width" style="">
 
@@ -7,58 +6,91 @@
         <div class="col-md-8">
 	    
 	    <div><!-- start content-->
-		<h2><b>SIPP Application for</b> <span class="label label-default"> <?php  echo (!empty($userDetails)? ucwords($userDetails->userTtitle ." ".$userDetails->userFirstName). " ".$userDetails->userLastName :'') ?> </span></h2> 
+		<h2>
+		    <?php echo $applicationDetails->applicationType; ?>  Application for
+		    <span class=""> 
+			<?php  echo (!empty($userDetails)? ucwords($userDetails->userTitle ." ".$userDetails->userFirstName). " ".$userDetails->userLastName :'') ?> 
+		    </span>
+		</h2> 
 	   
 		
-		<?php 
-                
-                if($applicationDetails){  ?>
-                
-		<h3><b>Application Reference: <?php echo $applicationDetails->applicationReference; ?> 
-		    <?php // echo (!empty($userDetails)? ucwords("$applicationReference"):'') ?>
-		    </b></h3>
-            
-                <?php } ?>
-		<hr>
-		 <h2><b>Establishment</b></h2>
-		<hr>
-		<h3><b>Client Detail</b> Completed </h3> 
-
-		<hr>
-		 <h3><b>Transfers</b> Please add any transfer details
-		 <a href="<?php echo base_url("client/".$userDetails->userBaseUrl."/transfer/".$applicationDetails->applicationID) ?>" class="btn btn-primary pull-right">Add</a>
-		 </h3>
-		<?php if($transfer): ?>
-		<?php foreach($transfer as $rows): ?>
-		<p> Reference number for transfer <?php echo $rows->transferReferrence; ?></p>
-		<?php endforeach; ?>
-		<?php endif; ?>
-		<hr>
-		 <h3><b>New Contribution</b> Please add any Contribution details
-		 <a href="<?php echo base_url("client/".$userDetails->userBaseUrl."/contribution/".$applicationDetails->applicationID) ?>" class="btn btn-primary pull-right">Add</a>
-		 </h3>
-		<?php if($contribution): ?>
-		                
-		<?php foreach($contribution as $rows): ?>
-		<p>Reference number for contribution <?php echo $rows->contributionsReference; ?></p>
-		<?php endforeach; ?>
-		<?php endif; ?>
-		<hr>
-		<h3><b>Expression of wish </b>  Please add any beneficiary details
-		 <button type="submit" class="btn btn-default pull-right">Add</button></h3>
-		<hr>
-		<h3><b>Benefits in payment</b> Please add income withdrawal details
-		 <button type="submit" class="btn btn-default pull-right">Add</button></h3>
-		<hr>
-		<h3><b>Investment Instruction</b> Please add Investment details
-		<a href="<?php echo base_url("client/".$userDetails->userBaseUrl."/investment/".$applicationDetails->applicationID) ?>" class="btn btn-primary pull-right">Add</a>
+		<h3>Application Reference: <?php echo $applicationDetails->applicationReference; ?> 
 		</h3>
-		<?php if($investment): ?>
-		<?php foreach($investment as $rows): ?>
-		<p>Reference number for Investment <?php echo $rows->investmentReference; ?></p>
-		<?php endforeach; ?>
-		<?php endif; ?>
+            
+		
+		<div>
+		    <hr>
+		    <h3>Client Detail Completed </h3> 
+		</div>
+
+		<div>
+		    <hr>
+		    <h3>Transfers <span class="small-text">Please add any transfer details</span>
+		     <a href="<?php echo base_url("client/".$userDetails->userBaseUrl."/application/".$applicationDetails->applicationID."/transfer/new") ?>" class="btn btn-gold pull-right small-text">Add</a>
+		     </h3>
+
+
+		    <?php if($transfers): ?>
+			<?php foreach($transfers as $rows=>$transfer): ?>
+			<p>  
+			     <a href="<?php echo base_url("client/".$userDetails->userBaseUrl."/application/".$applicationDetails->applicationID."/transfer/".$transfer->transferID) ?>">View Transfers</a>
+			    <?php //echo $rows->transferReferrence; ?>			    
+			</p>
+			<?php endforeach; ?>
+		    <?php endif; ?>
+		 </div>  
+		
+		<div>
+		    <hr>
+		      <h3>Contribution <span class="small-text">Please add contribution details</span>
+		     <a href="<?php echo base_url("client/".$userDetails->userBaseUrl."/application/".$applicationDetails->applicationID."/contribution/new") ?>" class="btn btn-gold pull-right small-text">Add</a>
+		     </h3>
+
+				    
+		     <?php if($contributions): ?>
+			<?php foreach($contributions as $rows=>$contribution): ?>
+			<p>  
+			     <a href="<?php echo base_url("client/".$userDetails->userBaseUrl."/application/".$applicationDetails->applicationID."/contribution/".$contribution->contributionID) ?>">View Contribution</a>
+			    <?php //print_r($contribution) ?>			    
+			</p>
+			<?php endforeach; ?>
+		    <?php endif; ?>
+		</div>
+		
+		
+		
+		<div style="display: none">
+		    <hr>
+		
+		<h3><b>Expression of wish </b>  Please add any beneficiary details
+		 <button type="submit" class="btn btn-primary-2 pull-right">Add</button></h3>
 		<hr>
+		
+		<h3><b>Benefits in payment</b> Please add income withdrawal details
+		 <button type="submit" class="btn btn-primary-2 pull-right">Add</button></h3>
+		</div>
+		
+	
+		
+		
+		<div>
+		    <hr>
+		      <h3>Investment Instruction <span class="small-text">Please add investment details</span>
+		     <a href="<?php echo base_url("client/".$userDetails->userBaseUrl."/application/".$applicationDetails->applicationID."/investment/new") ?>" class="btn btn-gold pull-right small-text">Add</a>
+		     </h3>
+
+				    
+		     <?php if($investments): ?>
+			<?php foreach($investments as $rows=>$investment): ?>
+			<p>  
+			     <a href="<?php echo base_url("client/".$userDetails->userBaseUrl."/application/".$applicationDetails->applicationID."/investment/".$investment->investmentInstructionID) ?>">View Investment Instructions</a>
+						    
+			</p>
+			<?php endforeach; ?>
+		    <?php endif; ?>
+		</div>
+		
+		
 	 
 	    
 	    </div><!-- end content-->

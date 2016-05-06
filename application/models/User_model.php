@@ -16,7 +16,7 @@ class User_Model extends CI_Model{
  
     
     function getUser_customWhere($where){
-       // $this->db->cache_on();
+     $this->db->join('clients', 'clients.userID = users.userID', 'LEFT');
         $this->db->where(array('userIsActive'=>1));
        //  $this->db->where('clientID >',0);
         return $this->db->where($where)
@@ -25,10 +25,10 @@ class User_Model extends CI_Model{
     }
     
     function listUsers_customWhere($where, $limit = false){
-       
+       $this->db->join('clients', 'clients.userID = users.userID', 'LEFT');
          $this->db->where(array('userIsActive'=>1));
         // $this->db->where('clientID >',0);
-         $this->db->group_by('userID');
+         $this->db->group_by('users.userID');
          
          if($limit !== false):
             $this->db->limit($limit);
@@ -41,10 +41,10 @@ class User_Model extends CI_Model{
     
     
     function getUserByID($user_id){
-       // $this->db->cache_on();
+       $this->db->join('clients', 'clients.userID = users.userID', 'LEFT');
       
          //$this->db->where('clientID >',0);
-       return  $this->db->where(array('userID' => (int)$user_id,                               
+       return  $this->db->where(array('users.userID' => (int)$user_id,                               
                                    'userIsActive'=>1))
                 ->get('users')
                 ->row(); 

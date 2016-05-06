@@ -9,8 +9,11 @@ $(function(){
      * 
      * show tool tips on element 
      */
-       $('[data-toggle="tooltip"]').tooltip();  
-    
+       $('[data-toggle="tooltip"]').tooltip(); 
+
+
+
+
     
     
     // date from today to 2yrs + 10 days

@@ -45,7 +45,7 @@ class Contribution extends MY_Controller {
      * @param int $applicationID
      * @return boolean
      */
-    public function index($userUrl = '', $applicationID = 0) {
+    public function index($userUrl = '', $applicationID = 0, $contributionID) {
 
         $data['userDetails'] = $userDetails = $this->user_accessor->getUser_customWhere(array('userBaseUrl' => $userUrl));
 
@@ -56,21 +56,31 @@ class Contribution extends MY_Controller {
             return false;
         endif;
 
-        $data['applicationDetails'] = $this->application_accessor->getApplicationDataById($applicationID);
-        $data['transfer'] = $this->transfer_accessor->getTransferDataById($applicationID);
-        $data['contribution'] = $this->contribution_accessor->getContributionsDataById($applicationID);
-        $data['investment'] = $this->investment_accessor->getInvestmentDataById($applicationID);
-
+	// check if this client owns this application and contribution
+	
+	if($this->contribution_accessor->isAvalidRequest($userDetails->clientID,$applicationID,$contributionID) === false):
+	    $this->session->set_flashdata('message', 'invalid Request detected!!!');
+            $this->session->set_flashdata('type', 'flash_error');
+            redirect($_SERVER['HTTP_REFERER']);
+            return false;
+	endif;
+		
+        
+        $data['applicationDetails'] = $this->application_accessor->getByID($applicationID);       
+        $data['contribution'] = $this->contribution_accessor->getByID($contributionID);
+	
 
         $data['show_uploadLink'] = true;
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/navbar', $data);
-        $this->load->view('application/contributionForm', $data);
+        $this->load->view('contribution/viewContribution', $data);
         $this->load->view('templates/footer', $data);
     }
 
-    public function new_Contribution($userUrl = '', $applicationId) {
+    
+    
+    public function new_Contribution($userUrl = '', $applicationID = 0) {
 
         $userDetails = $this->user_accessor->getUser_customWhere(array('userBaseUrl' => $userUrl));
 
@@ -81,68 +91,196 @@ class Contribution extends MY_Controller {
             return false;
         endif;
 
-        $this->load->library('form_validation');
-        $app_id = $applicationId;
-        $random_no = rand(111111111, 999999999);
+	// check if this client owns this application	
+	if($this->application_accessor->isAvalidRequest($userDetails->clientID, $applicationID) === false):
+	    $this->session->set_flashdata('message', 'invalid Request detected!!!');
+            $this->session->set_flashdata('type', 'flash_error');
+            redirect($_SERVER['HTTP_REFERER']);
+            return false;
+	endif;
+	
+	
+	
+	
+	if ($this->input->post('submit')):
+	    
+	    if(!$this->input->post('lumpSumAmount') && !$this->input->post('regularContributionAmount')):
+		 $this->form_validation->set_rules('lumpSumAmount', 'Lum Sum Amount or Regular contribution', 'required');
+	    endif;
+	
+            $this->form_validation->set_rules('lumpSumAmount', 'Lum Sum Amount', 'trim');
+	
+	    if($this->input->post('regularContributionAmount')):
+		$this->form_validation->set_rules('regularContributionAmount', 'Regular amount', 'required');
+		$this->form_validation->set_rules('regularContributionfrequency', 'Regular contribution frequency', 'required');
+		$this->form_validation->set_rules('bankAccountHolder', 'Account holder', 'required');
+		$this->form_validation->set_rules('bankName', 'Bank Name', 'required');
+		$this->form_validation->set_rules('bankAccountNumber', 'Account Number', 'required');
+		$this->form_validation->set_rules('bankSortCode', 'Sortcode', 'required');
+		
+		$this->form_validation->set_rules('bankAddressLine1', 'Address', 'required');
+		$this->form_validation->set_rules('bankPostCode', 'Postcode', 'required');
+	    endif;
+           
 
-        if ($this->input->post('submit')):
 
-            $this->form_validation->set_rules('fund_type', 'Fund type', 'required');
-            $this->form_validation->set_rules('lump_sum_amount', 'Lump sum amount', 'required');
-            $this->form_validation->set_rules('regular_amount', 'Regular amount', 'required');
-            $this->form_validation->set_rules('frequency_regular', 'Frequency regular', 'required');
-            $this->form_validation->set_rules('account_holder', 'Account holder', 'required');
-            $this->form_validation->set_rules('society_account_holder', 'Society account holder', 'required');
-            $this->form_validation->set_rules('sorrt_code', 'Sorrt code', 'required');
-            $this->form_validation->set_rules('postal_address', 'Postal address', 'required');
-
-
-            $w_data['applicationID'] = $app_id;
-
-            $fund_type = $this->input->post('fund_type');
-            switch ($fund_type) {
-                case "Lamp sum investment":
-                    $w_data['fund_type'] = "Lamp sum investment";
-                    break;
-                case "Regular Contribution":
-                    $w_data['fund_type'] = "Regular Contribution";
-                    break;
-            };
-
-            $dup = $this->contribution_accessor->fundTypeExists($w_data);
-
-            if ($dup) {
-                $this->session->set_flashdata("flash_msg", "Selected fund type already exists!");
-                redirect("client/$userUrl/contribution/$app_id");
-            }
 
             if ($this->form_validation->run()):
-                $newContribution['applicationID'] = $app_id;
-                $newContribution['fund_type'] = $fund_type;
-                $newContribution['lump_sum_amount'] = $this->input->post('lump_sum_amount');
-                $newContribution['regular_amount'] = $this->input->post('regular_amount');
-                $newContribution['frequency_regular'] = $this->input->post('frequency_regular');
-                $newContribution['account_holder'] = $this->input->post('account_holder');
-                $newContribution['society_account_holder'] = $this->input->post('society_account_holder');
-                $newContribution['sorrt_code'] = $this->input->post('sorrt_code');
-                $newContribution['postal_address'] = $this->input->post('postal_address');
-                $newContribution['contributionsReference'] = $random_no;
-
-                $contributionAdded = $this->contribution_accessor->addNewContribution($newContribution);
-
-
-                if ($contributionAdded):
-// go to application overview
-                   redirect("client/$userUrl/application/$app_id");
-                endif;
+                $newContribution['applicationID'] = $applicationID;
+             
+                $newContribution['lumpSumAmount'] =		price_format_DB($this->input->post('lumpSumAmount'));
+		
                 
-            else:
-                
-                $this->index($userUrl, $app_id);
-            endif;
-            endif;
+		 if($this->input->post('regularContributionAmount')):
+		     
+		    $newContribution['regularContributionAmount'] = price_format_DB($this->input->post('regularContributionAmount'));
+		    $newContribution['regularContributionfrequency'] = $this->input->post('regularContributionfrequency');
+		    $newContribution['bankAccountHolder'] = $this->input->post('bankAccountHolder');
+		    $newContribution['bankAccountNumber'] = $this->input->post('bankAccountNumber');
+		    $newContribution['bankSortCode'] = $this->input->post('bankSortCode');
+
+		    $newContribution['bankName'] = $this->input->post('bankName');
+		    $newContribution['bankAddressLine1'] = $this->input->post('bankAddressLine1');
+		    $newContribution['bankAddressLine2'] = $this->input->post('bankAddressLine2');
+		    $newContribution['bankAddressLine3'] = $this->input->post('bankAddressLine3');
+		    $newContribution['bankAddressTownCity'] = $this->input->post('bankAddressTownCity');
+		    $newContribution['bankAddressCounty'] = $this->input->post('bankAddressCounty');
+		    $newContribution['bankPostCode'] = $this->input->post('bankPostCode');
+		 endif;
+		
+
+                $this->contribution_accessor->addNewContribution($newContribution);
+
+
+		redirect("client/$userUrl/application/$applicationID");
+		else:
+		    echo validation_errors();echo "not run";
+	    endif;// if run();
+		
+        endif; // if is submit
        
+	
+	
+	
+	
+	$data['applicationDetails'] = $this->application_accessor->getByID($applicationID);       
+	 $data['userDetails'] = $userDetails;
+	$data['mode'] = "New";
+
+        $data['show_uploadLink'] = true;
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar', $data);
+        $this->load->view('contribution/contributionForm', $data);
+        $this->load->view('templates/footer', $data);
+  
     
 
 }
+
+
+
+    function edit_Contribution($userUrl = '', $applicationID = 0, $contributionID = 0) {
+
+        $data['userDetails'] = $userDetails = $this->user_accessor->getUser_customWhere(array('userBaseUrl' => $userUrl));
+
+        if (empty($userDetails)):
+            $this->session->set_flashdata('message', 'User Not found!!!');
+            $this->session->set_flashdata('type', 'flash_error');
+            redirect($_SERVER['HTTP_REFERER']);
+            return false;
+        endif;
+
+	// check if this client owns this application and contribution
+	
+	if($this->contribution_accessor->isAvalidRequest($userDetails->clientID,$applicationID, $contributionID) === false):
+	    $this->session->set_flashdata('message', 'invalid Request detected!!!');
+            $this->session->set_flashdata('type', 'flash_error');
+            redirect($_SERVER['HTTP_REFERER']);
+            return false;
+	endif;
+	
+	
+	if ($this->input->post('submit')):
+
+	    
+	    if(!$this->input->post('lumpSumAmount') && !$this->input->post('regularContributionAmount')):
+		 $this->form_validation->set_rules('lumpSumAmount', 'Lum Sum Amount or Regular contribution', 'required');
+	    endif;
+	
+            $this->form_validation->set_rules('lumpSumAmount', 'Lum Sum Amount', 'trim');
+	
+	    if($this->input->post('regularContributionAmount')):
+		$this->form_validation->set_rules('regularContributionAmount', 'Regular amount', 'required');
+		$this->form_validation->set_rules('regularContributionfrequency', 'Regular contribution frequency', 'required');
+		$this->form_validation->set_rules('bankAccountHolder', 'Account holder', 'required');
+		$this->form_validation->set_rules('bankName', 'Bank Name', 'required');
+		$this->form_validation->set_rules('bankAccountNumber', 'Account Number', 'required');
+		$this->form_validation->set_rules('bankSortCode', 'Sortcode', 'required');
+		
+		$this->form_validation->set_rules('bankAddressLine1', 'Address', 'required');
+		$this->form_validation->set_rules('bankPostCode', 'Postcode', 'required');
+	    endif;
+           
+
+
+
+            if ($this->form_validation->run()):
+                $newContribution['applicationID'] = $applicationID;
+             
+                $newContribution['lumpSumAmount'] =		price_format_DB($this->input->post('lumpSumAmount'));
+               
+		if($this->input->post('regularContributionAmount')):
+		    $newContribution['regularContributionAmount'] = price_format_DB($this->input->post('regularContributionAmount'));
+		    $newContribution['regularContributionfrequency'] = $this->input->post('regularContributionfrequency');
+		    $newContribution['bankAccountHolder'] = $this->input->post('bankAccountHolder');
+		    $newContribution['bankAccountNumber'] = $this->input->post('bankAccountNumber');
+		    $newContribution['bankSortCode'] = $this->input->post('bankSortCode');
+
+		    $newContribution['bankName'] = $this->input->post('bankName');
+		    $newContribution['bankAddressLine1'] = $this->input->post('bankAddressLine1');
+		    $newContribution['bankAddressLine2'] = $this->input->post('bankAddressLine2');
+		    $newContribution['bankAddressLine3'] = $this->input->post('bankAddressLine3');
+		    $newContribution['bankAddressTownCity'] = $this->input->post('bankAddressTownCity');
+		    $newContribution['bankAddressCounty'] = $this->input->post('bankAddressCounty');
+		    $newContribution['bankPostCode'] = $this->input->post('bankPostCode');
+		endif;
+		
+
+		$updateWhere['contributionID'] = $contributionID;
+		$updateWhere['applicationID'] = $applicationID;
+                $this->contribution_accessor->updateContribution($newContribution, $updateWhere);
+
+
+		redirect("client/$userUrl/application/$applicationID");
+
+	    endif;// if run();
+		
+        endif; // if is submit
+       
+	
+	
+	
+	
+	$data['applicationDetails'] = $this->application_accessor->getByID($applicationID);       
+        $data['contribution'] = $this->contribution_accessor->getByID($contributionID);
+	$data['mode'] = "Edit";
+
+        $data['show_uploadLink'] = true;
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/navbar', $data);
+        $this->load->view('contribution/contributionForm', $data);
+        $this->load->view('templates/footer', $data);
+	
+    }
+
+
+
+
+
+
+
+
+
 }

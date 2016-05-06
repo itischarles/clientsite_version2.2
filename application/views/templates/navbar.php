@@ -67,7 +67,7 @@ $hasClientRole = $authorisation->hasRoles(array('Client'));
 	      
 	      <?php if($hasSearchPriv === true):?>
 		 <li class="<?php echo (isset($link_title) &&($link_title == 'add-user')? 'active': '') ?>">
-                  <a href="<?php echo base_url('client/new') ?>">Add Client</a>
+                  <a href="<?php echo base_url('add-new-client') ?>">Add Client</a>
 		</li>	      
 	      <?php endif;?>
 		
