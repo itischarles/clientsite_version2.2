@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 06, 2016 at 10:55 AM
+-- Generation Time: May 09, 2016 at 11:10 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -29,6 +29,7 @@ USE `client_site_v2.2`;
 -- Table structure for table `active_users`
 --
 
+DROP TABLE IF EXISTS `active_users`;
 CREATE TABLE IF NOT EXISTS `active_users` (
 `active_users_id` int(11) NOT NULL,
   `last_active` datetime DEFAULT NULL,
@@ -43,6 +44,7 @@ CREATE TABLE IF NOT EXISTS `active_users` (
 -- Table structure for table `advisers`
 --
 
+DROP TABLE IF EXISTS `advisers`;
 CREATE TABLE IF NOT EXISTS `advisers` (
   `adviserID` int(11) NOT NULL,
   `adviserReference` varchar(45) DEFAULT NULL,
@@ -62,6 +64,7 @@ INSERT IGNORE INTO `advisers` (`adviserID`, `adviserReference`, `userID`) VALUES
 -- Table structure for table `adviser_has_client`
 --
 
+DROP TABLE IF EXISTS `adviser_has_client`;
 CREATE TABLE IF NOT EXISTS `adviser_has_client` (
 `adviserHasClientID` int(11) NOT NULL,
   `clientID` int(11) NOT NULL,
@@ -81,6 +84,7 @@ INSERT IGNORE INTO `adviser_has_client` (`adviserHasClientID`, `clientID`, `advi
 -- Table structure for table `applications`
 --
 
+DROP TABLE IF EXISTS `applications`;
 CREATE TABLE IF NOT EXISTS `applications` (
 `applicationID` int(11) NOT NULL,
   `applicationType` varchar(15) NOT NULL,
@@ -107,6 +111,7 @@ INSERT IGNORE INTO `applications` (`applicationID`, `applicationType`, `applicat
 -- Table structure for table `audit_logins`
 --
 
+DROP TABLE IF EXISTS `audit_logins`;
 CREATE TABLE IF NOT EXISTS `audit_logins` (
 `auditLoginID` int(11) NOT NULL,
   `sourceIP` varchar(16) NOT NULL,
@@ -130,6 +135,7 @@ INSERT IGNORE INTO `audit_logins` (`auditLoginID`, `sourceIP`, `loginSuccessful`
 -- Table structure for table `auth_permissions`
 --
 
+DROP TABLE IF EXISTS `auth_permissions`;
 CREATE TABLE IF NOT EXISTS `auth_permissions` (
 `permID` int(10) unsigned NOT NULL,
   `permDesc` varchar(50) NOT NULL
@@ -152,6 +158,7 @@ INSERT IGNORE INTO `auth_permissions` (`permID`, `permDesc`) VALUES
 -- Table structure for table `auth_roles`
 --
 
+DROP TABLE IF EXISTS `auth_roles`;
 CREATE TABLE IF NOT EXISTS `auth_roles` (
 `roleID` int(10) unsigned NOT NULL,
   `roleName` varchar(50) NOT NULL
@@ -172,6 +179,7 @@ INSERT IGNORE INTO `auth_roles` (`roleID`, `roleName`) VALUES
 -- Table structure for table `auth_role_perm`
 --
 
+DROP TABLE IF EXISTS `auth_role_perm`;
 CREATE TABLE IF NOT EXISTS `auth_role_perm` (
   `roleID` int(10) unsigned NOT NULL,
   `permID` int(10) unsigned NOT NULL
@@ -194,6 +202,7 @@ INSERT IGNORE INTO `auth_role_perm` (`roleID`, `permID`) VALUES
 -- Table structure for table `auth_user_role`
 --
 
+DROP TABLE IF EXISTS `auth_user_role`;
 CREATE TABLE IF NOT EXISTS `auth_user_role` (
   `userID` int(11) NOT NULL,
   `roleID` int(10) unsigned NOT NULL
@@ -213,20 +222,26 @@ INSERT IGNORE INTO `auth_user_role` (`userID`, `roleID`) VALUES
 -- Table structure for table `clients`
 --
 
+DROP TABLE IF EXISTS `clients`;
 CREATE TABLE IF NOT EXISTS `clients` (
 `clientID` int(11) NOT NULL,
   `adviserID` int(11) NOT NULL,
   `clientReference` varchar(45) DEFAULT NULL,
   `clientRetirementAge` int(11) DEFAULT NULL,
   `userID` int(10) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `clients`
 --
 
 INSERT IGNORE INTO `clients` (`clientID`, `adviserID`, `clientReference`, `clientRetirementAge`, `userID`) VALUES
-(1, 1, 'asdfsdaf', 64, 1);
+(1, 1, 'asdfsdaf', 64, 1),
+(2, 0, NULL, NULL, 5),
+(3, 0, NULL, NULL, 6),
+(4, 0, NULL, NULL, 7),
+(5, 0, NULL, NULL, 8),
+(6, 0, NULL, NULL, 9);
 
 -- --------------------------------------------------------
 
@@ -234,6 +249,7 @@ INSERT IGNORE INTO `clients` (`clientID`, `adviserID`, `clientReference`, `clien
 -- Table structure for table `contributions`
 --
 
+DROP TABLE IF EXISTS `contributions`;
 CREATE TABLE IF NOT EXISTS `contributions` (
 `contributionID` int(11) NOT NULL,
   `applicationID` int(11) NOT NULL,
@@ -265,6 +281,7 @@ INSERT IGNORE INTO `contributions` (`contributionID`, `applicationID`, `lumpSumA
 -- Table structure for table `docs_view_history`
 --
 
+DROP TABLE IF EXISTS `docs_view_history`;
 CREATE TABLE IF NOT EXISTS `docs_view_history` (
 `docsViewHistoryID` int(11) NOT NULL,
   `docViewHistoryDate` datetime DEFAULT NULL,
@@ -280,6 +297,7 @@ CREATE TABLE IF NOT EXISTS `docs_view_history` (
 -- Table structure for table `document`
 --
 
+DROP TABLE IF EXISTS `document`;
 CREATE TABLE IF NOT EXISTS `document` (
 `documentID` int(11) NOT NULL,
   `docName` varchar(155) NOT NULL,
@@ -297,6 +315,7 @@ CREATE TABLE IF NOT EXISTS `document` (
 -- Table structure for table `email`
 --
 
+DROP TABLE IF EXISTS `email`;
 CREATE TABLE IF NOT EXISTS `email` (
 `emailMessageID` int(10) NOT NULL,
   `emailMessageFrom` varchar(50) DEFAULT NULL,
@@ -315,6 +334,7 @@ CREATE TABLE IF NOT EXISTS `email` (
 -- Table structure for table `glossary`
 --
 
+DROP TABLE IF EXISTS `glossary`;
 CREATE TABLE IF NOT EXISTS `glossary` (
 `idglossary` int(11) NOT NULL,
   `term` varchar(45) NOT NULL,
@@ -327,6 +347,7 @@ CREATE TABLE IF NOT EXISTS `glossary` (
 -- Table structure for table `investment_intructions`
 --
 
+DROP TABLE IF EXISTS `investment_intructions`;
 CREATE TABLE IF NOT EXISTS `investment_intructions` (
 `investmentInstructionID` int(11) NOT NULL,
   `applicationID` int(11) DEFAULT NULL,
@@ -352,6 +373,7 @@ INSERT IGNORE INTO `investment_intructions` (`investmentInstructionID`, `applica
 -- Table structure for table `investment_type`
 --
 
+DROP TABLE IF EXISTS `investment_type`;
 CREATE TABLE IF NOT EXISTS `investment_type` (
 `investmentTypeID` int(11) NOT NULL,
   `investmentTypeName` varchar(45) DEFAULT NULL,
@@ -373,6 +395,7 @@ INSERT IGNORE INTO `investment_type` (`investmentTypeID`, `investmentTypeName`, 
 -- Table structure for table `login_blacklist`
 --
 
+DROP TABLE IF EXISTS `login_blacklist`;
 CREATE TABLE IF NOT EXISTS `login_blacklist` (
 `loginBlacklistID` int(11) NOT NULL,
   `ipaddress` varchar(16) NOT NULL,
@@ -387,6 +410,7 @@ CREATE TABLE IF NOT EXISTS `login_blacklist` (
 -- Table structure for table `messages`
 --
 
+DROP TABLE IF EXISTS `messages`;
 CREATE TABLE IF NOT EXISTS `messages` (
 `messageID` int(10) NOT NULL,
   `messageDate` datetime DEFAULT NULL,
@@ -402,6 +426,7 @@ CREATE TABLE IF NOT EXISTS `messages` (
 -- Table structure for table `terms_definitions`
 --
 
+DROP TABLE IF EXISTS `terms_definitions`;
 CREATE TABLE IF NOT EXISTS `terms_definitions` (
 `terms_definitionID` int(11) NOT NULL,
   `terms` varchar(155) NOT NULL,
@@ -414,6 +439,7 @@ CREATE TABLE IF NOT EXISTS `terms_definitions` (
 -- Table structure for table `transfers`
 --
 
+DROP TABLE IF EXISTS `transfers`;
 CREATE TABLE IF NOT EXISTS `transfers` (
 `transferID` int(11) NOT NULL,
   `applicationID` int(11) NOT NULL,
@@ -436,6 +462,7 @@ INSERT IGNORE INTO `transfers` (`transferID`, `applicationID`, `pensionProvider`
 -- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
 `userID` int(10) NOT NULL,
   `userIsActive` int(1) NOT NULL DEFAULT '0',
@@ -457,7 +484,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `userPasswordChanged` int(1) NOT NULL DEFAULT '0',
   `userBaseUrl` varchar(85) NOT NULL COMMENT 'unique code to identify client',
   `userDateCreated` date DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
@@ -465,7 +492,14 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT IGNORE INTO `users` (`userID`, `userIsActive`, `userTitle`, `userFirstName`, `userLastName`, `userDOB`, `userAddressLine1`, `userAddressLine2`, `userPostcode`, `userCounty`, `userTown`, `userTel`, `userMobile`, `userEmail`, `userNinum`, `userUsername`, `userPwordHash`, `userPasswordChanged`, `userBaseUrl`, `userDateCreated`) VALUES
 (1, 1, 'mr', 'adv1', 'user1', '2006-12-12', 'asdf', 'asdfsf', '12313', 'india', 'town', '1231414', '123214124', 'adv1user1@gp.com', '213213', 'adv1user1', '$2y$10$ISalZprMNt4OuUi1h9FCv.SDifLd2dC54fFKbdUGq7B/iN6klUol2', 0, 'asdf', '2016-04-22'),
-(2, 2, 'mr', 'client2', 'user2', '2006-12-12', '123', '1123', '123', 'india', 'town', '67896789', '6879679', 'client2user2@gp.com', '567567', 'adv2user2', '$2y$10$ISalZprMNt4OuUi1h9FCv.SDifLd2dC54fFKbdUGq7B/iN6klUol2', 0, 'asdf1', '2016-04-22');
+(2, 2, 'mr', 'client2', 'user2', '2006-12-12', '123', '1123', '123', 'india', 'town', '67896789', '6879679', 'client2user2@gp.com', '567567', 'adv2user2', '$2y$10$ISalZprMNt4OuUi1h9FCv.SDifLd2dC54fFKbdUGq7B/iN6klUol2', 0, 'asdf1', '2016-04-22'),
+(3, 0, 'Mr', 'Jmes', 'john', '1974-05-15', 'address', 'address', 'de', 'county', 'town', '123456789', NULL, 'admin@intelligentmoney.com', 'precious', NULL, NULL, 0, '12ffb0968f2f56e51a59a6beb37b2859', '2016-05-06'),
+(4, 0, 'Mr', 'Jmes', 'john', '1974-05-15', 'address', 'address', 'de', 'county', 'town', '123456789', NULL, 'admin@intelligentmoney.com', '65656', NULL, NULL, 0, 'a4613e8d72a61b3b69b32d040f89ad81', '2016-05-06'),
+(5, 0, 'Mr', 'Jmes', 'john', '1974-05-15', 'address', 'address', 'de', 'county', 'town', '123456789', NULL, 'admin@intelligentmoney.com', '5545454545', NULL, NULL, 0, '2b45c629e577731c4df84fc34f936a89', '2016-05-06'),
+(6, 0, 'Ms', 'JBKH', 'jgj', '2006-05-11', 'dsds', 'sdsd', 'sdsd', 'dsd', 'sdsd', 'sds', NULL, 'admin@intelligentmoney.com', 'sdsdsdsds', NULL, NULL, 0, '1943102704f8f8f3302c2b730728e023', '2016-05-06'),
+(7, 1, 'Mr', 'sdfsa', 'h', '1942-05-14', 'BKJH', 'BJK', 'oji', 'HJB', 'sdsd', 'KHJ', NULL, 'admin@intelligentmoney.com', 'tywertert', NULL, NULL, 0, '1e8c391abfde9abea82d75a2d60278d4', '2016-05-06'),
+(8, 1, 'Mr', 'sdfsa', 'h', '1942-05-14', 'BKJH', 'BJK', 'oji', 'HJB', 'sdsd', 'KHJ', NULL, 'admin@intelligentmoney.com', 'sasasasas', NULL, NULL, 0, '300891a62162b960cf02ce3827bb363c', '2016-05-06'),
+(9, 1, 'Mr', 'sdfsa', 'JBK', '2006-05-11', 'address', 'address', 'oji', 'county', 'jb', '123456789', NULL, 'admin@intelligentmoney.com', 'aasasasa', NULL, NULL, 0, 'a7a3d70c6d17a73140918996d03c014f', '2016-05-06');
 
 -- --------------------------------------------------------
 
@@ -473,6 +507,7 @@ INSERT IGNORE INTO `users` (`userID`, `userIsActive`, `userTitle`, `userFirstNam
 -- Table structure for table `user_group`
 --
 
+DROP TABLE IF EXISTS `user_group`;
 CREATE TABLE IF NOT EXISTS `user_group` (
 `groupID` int(11) NOT NULL,
   `groupName` varchar(45) DEFAULT NULL
@@ -665,7 +700,7 @@ MODIFY `roleID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT for table `clients`
 --
 ALTER TABLE `clients`
-MODIFY `clientID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `clientID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `contributions`
 --
@@ -725,7 +760,7 @@ MODIFY `transferID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `userID` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `userID` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `user_group`
 --
