@@ -56,11 +56,9 @@ class Transfer extends MY_Controller {
             return false;
         endif;
 
-	$isValid['applications.applicationID'] = $applicationID;
-	$isValid['transferID'] = $transferID;
-	$isValid['clientID'] = $userDetails->clientID;
+
 	
-	if($this->transfer_accessor->isAvalidRequest($isValid === false)):
+	if($this->transfer_accessor->isAvalidRequest($userDetails->clientID,$applicationID,$transferID) === false):
 	    $this->session->set_flashdata('message', 'invalid Request detected!!!');
             $this->session->set_flashdata('type', 'flash_error');
             redirect($_SERVER['HTTP_REFERER']);
@@ -155,11 +153,8 @@ class Transfer extends MY_Controller {
             return false;
         endif;
 
-	$isValid['applications.applicationID'] = $applicationID;
-	$isValid['transferID'] = $transferID;
-	$isValid['clientID'] = $userDetails->clientID;
 	
-	if($this->transfer_accessor->isAvalidRequest($isValid === false)):
+	if($this->transfer_accessor->isAvalidRequest($userDetails->clientID,$applicationID,$transferID) === false):
 	    $this->session->set_flashdata('message', 'invalid Request detected!!!');
             $this->session->set_flashdata('type', 'flash_error');
             redirect($_SERVER['HTTP_REFERER']);
